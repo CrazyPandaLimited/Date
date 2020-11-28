@@ -7,7 +7,7 @@ namespace panda { namespace date {
 bool Date::_range_check = false;
 
 inline static ptime_t epoch_cmp (ptime_t s1, uint32_t mks1, ptime_t s2, uint32_t mks2) {
-    return (s1 == s2) ? mks1 - mks2 : s1 - s2;
+    return (s1 == s2) ? (ptime_t)mks1 - mks2 : s1 - s2;
 }
 
 inline static ptime_t pseudo_epoch (const datetime& date) {
