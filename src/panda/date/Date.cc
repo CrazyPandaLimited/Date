@@ -18,6 +18,15 @@ inline static ptime_t date_cmp (const datetime& d1, uint32_t mks1, const datetim
     return epoch_cmp(pseudo_epoch(d1), mks1, pseudo_epoch(d2), mks2);
 }
 
+ptime_t Date::today_epoch () {
+    datetime date;
+    localtime(::time(NULL), &date);
+    date.sec = 0;
+    date.min = 0;
+    date.hour = 0;
+    return timelocall(&date);
+}
+
 void Date::set (string_view str, const TimezoneSP& zone, int fmt) {
     if (zone) _zone = zone;
     parse(str, fmt); // parse() can parse and create zone

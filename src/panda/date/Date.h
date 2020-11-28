@@ -37,6 +37,9 @@ struct Date {
     struct WeekOfYear {
         uint8_t week;
         int32_t year;
+        bool operator== (const WeekOfYear& oth) const {
+            return week == oth.week && year == oth.year;
+        }
     };
 
     static inline Date now () { return Date(::time(NULL)); }
@@ -57,6 +60,8 @@ struct Date {
         ret.truncate();
         return ret;
     }
+
+    static ptime_t today_epoch ();
 
     Date () { set((ptime_t)0, nullptr); }
 
@@ -79,6 +84,8 @@ struct Date {
         _zone_set(zone);
         epoch(ep);
     }
+
+    void set (int ep, const TimezoneSP& zone = {}) { set((ptime_t)ep, zone); }
 
     void set (ptime_t ep, ptime_t mksec, const TimezoneSP& zone = {}) {
         if (mksec >= 0 && mksec < MICROSECONDS_IN_SECOND) {
