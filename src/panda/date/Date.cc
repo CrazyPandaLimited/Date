@@ -239,4 +239,8 @@ void swap (Date& a, Date& b) {
     swap(a._mksec, b._mksec);
 }
 
+std::ostream& operator<< (std::ostream& os, const Date& d) {
+    return os << d.to_string();
+}
+
 }}

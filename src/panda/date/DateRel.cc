@@ -193,4 +193,8 @@ DateRel& DateRel::negate () {
     return *this;
 }
 
+std::ostream& operator<< (std::ostream& os, const DateRel& rel) {
+    return os << rel.to_string();
+}
+
 }}

@@ -3,6 +3,7 @@
 #include "../time.h"
 #include <math.h>
 #include <time.h>
+#include <iosfwd>
 #include <errno.h>
 #include <stdint.h>
 #include <system_error>
@@ -315,6 +316,8 @@ private:
         else if (zone) _zone = zone;
     }
 };
+
+std::ostream& operator<< (std::ostream&, const Date&);
 
 inline bool operator== (const Date& lhs, const Date& rhs) { return !lhs.compare(rhs); }
 inline bool operator!= (const Date& lhs, const Date& rhs) { return lhs.compare(rhs); }

@@ -144,6 +144,8 @@ extern const DateRel HOUR;
 extern const DateRel MIN;
 extern const DateRel SEC;
 
+std::ostream& operator<< (std::ostream&, const DateRel&);
+
 inline bool operator== (const DateRel& lhs, const DateRel& rhs) { return !lhs.compare(rhs); }
 inline bool operator!= (const DateRel& lhs, const DateRel& rhs) { return !operator==(lhs, rhs); }
 inline bool operator<  (const DateRel& lhs, const DateRel& rhs) { return lhs.compare(rhs) < 0; }
@@ -156,5 +158,7 @@ inline DateRel operator- (const DateRel& lhs, const DateRel& rhs) { return DateR
 inline DateRel operator* (const DateRel& dr, double koef)         { return DateRel(dr) *= koef; }
 inline DateRel operator* (double koef, const DateRel& dr)         { return DateRel(dr) *= koef; }
 inline DateRel operator/ (const DateRel& dr, double koef)         { return DateRel(dr) /= koef; }
+
+inline DateRel operator- (const Date& lhs, const Date& rhs)       { return DateRel(rhs, lhs); }
 
 }}

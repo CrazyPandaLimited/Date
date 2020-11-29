@@ -5,8 +5,7 @@
 
 #define TEST(name) TEST_CASE("mksec: " name, "[mksec]")
 
-
-void is_approx (double testv, double v) {
+static void is_approx (double testv, double v) {
     CHECK(abs(testv - v) < (double)0.000001);
 }
 
