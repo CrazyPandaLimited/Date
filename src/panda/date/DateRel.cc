@@ -1,5 +1,6 @@
 #include "DateRel.h"
 #include <panda/from_chars.h>
+#include <ostream>
     
 namespace panda { namespace date {
 

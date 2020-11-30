@@ -1,6 +1,7 @@
 #include "Date.h"
 #include "DateRel.h"
 #include "../time/format.h"
+#include <ostream>
 
 namespace panda { namespace date {
 
