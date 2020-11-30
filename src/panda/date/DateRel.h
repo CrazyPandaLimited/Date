@@ -17,15 +17,17 @@ struct DateRel {
 
     DateRel () : _sec(0), _min(0), _hour(0), _day(0), _month(0), _year(0) {}
 
-    explicit DateRel (ptime_t year, ptime_t mon=0, ptime_t day=0, ptime_t hour=0, ptime_t min=0, ptime_t sec=0)
+    DateRel (ptime_t year, ptime_t mon = 0, ptime_t day=0, ptime_t hour=0, ptime_t min=0, ptime_t sec=0)
                      : _sec(sec), _min(min), _hour(hour), _day(day), _month(mon), _year(year) {}
 
     explicit DateRel (string_view str, int fmt = InputFormat::all) { _error = parse(str, fmt); }
 
-    DateRel (const Date& from, const Date& till) { set(from, till); }
-    DateRel (const DateRel& source)              { operator=(source); }
+    DateRel (const Date& from, const Date& till)               { set(from, till); }
+    DateRel (const string_view& from, const string_view& till) { set(Date(from), Date(till)); }
+    DateRel (const DateRel& source)                            { operator=(source); }
 
     void set (const Date&, const Date&);
+    void set (const string_view& from, const string_view& till) { set(Date(from), Date(till)); }
 
     DateRel& operator= (string_view str) { _error = parse(str, InputFormat::all); return *this; }
 
@@ -99,6 +101,7 @@ struct DateRel {
     DateRel& operator-= (const DateRel&);
     DateRel& operator*= (double koef);
     DateRel& operator/= (double koef);
+    DateRel  operator-  () const { return negated(); }
     DateRel& negate     ();
 
     DateRel negated () const { return DateRel(*this).negate(); }

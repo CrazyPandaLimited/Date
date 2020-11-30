@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <panda/time.h>
 #include <panda/date.h>
 #include <catch2/catch.hpp>
@@ -26,3 +27,7 @@ struct TempZone {
         tzset(old);
     }
 };
+
+static inline void is_approx (double testv, double v) {
+    CHECK(abs(testv - v) < (double)0.000001);
+}

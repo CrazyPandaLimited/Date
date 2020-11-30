@@ -3,10 +3,6 @@
 
 #define TEST(name) TEST_CASE("format-iso: " name, "[format-iso]")
 
-void is_approx (double testv, double v) {
-    CHECK(abs(testv - v) < (double)0.000001);
-}
-
 static void test (string oname, string ostr, double epoch, string_view tzabbr) {
     for (auto c : {"-", "/"}) {
         string name = oname, str = ostr;

@@ -5,10 +5,6 @@
 
 #define TEST(name) TEST_CASE("mksec: " name, "[mksec]")
 
-static void is_approx (double testv, double v) {
-    CHECK(abs(testv - v) < (double)0.000001);
-}
-
 TEST("zero ctor") {
     Date date(0);
     CHECK(date.epoch() == 0);
