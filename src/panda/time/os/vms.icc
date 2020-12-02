@@ -2,7 +2,7 @@
 
 namespace panda { namespace time {
 
-static inline bool get_os_localzone_name (char* lzname) {
+static bool get_os_localzone_name (char* lzname) {
     if (
         tz_from_env(lzname, "SYS$TIMEZONE_RULE") ||
         tz_from_env(lzname, "SYS$TIMEZONE_NAME") ||
@@ -13,3 +13,5 @@ static inline bool get_os_localzone_name (char* lzname) {
 }
 
 }}
+
+#include "scan_files_unix.icc"

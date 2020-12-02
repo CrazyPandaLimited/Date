@@ -1,6 +1,7 @@
 #pragma once
 #include <limits>
 #include <time.h>
+#include <vector>
 #include <stdint.h>
 #include <stddef.h>
 #include <panda/refcnt.h>
@@ -52,6 +53,9 @@ void tzset (const TimezoneSP& = {});
 const string& tzdir    ();
 void          tzdir    (const string&);
 const string& tzsysdir ();
+
+void use_system_timezones ();
+std::vector<string> available_timezones ();
 
 bool     gmtime   (ptime_t epoch, datetime* result);
 datetime gmtime   (ptime_t epoch);

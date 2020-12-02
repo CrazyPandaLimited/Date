@@ -2,76 +2,17 @@
 #include <map>
 #include <assert.h>
 #include <stdlib.h>
+#include <fstream>
 #include <cstring>
 #include <panda/string.h>
 #include <panda/unordered_string_map.h>
-
-namespace panda { namespace time {
-
-static constexpr const size_t  TZNAME_MAX     = 255; // max length of timezone name or POSIX rule (Europe/Moscow, ...)
-static constexpr const char    GMT_FALLBACK[] = "GMT0";
-
-static bool tz_from_env (char* lzname, const char* envar) {
-    const char* val = getenv(envar);
-    if (val == NULL) return false;
-    size_t len = std::strlen(val);
-    if (len < 1 || len > TZNAME_MAX) return false;
-    std::strcpy(lzname, val);
-    return true;
-}
-
-static string readfile (const string_view& path) {
-    char spath[path.length()+1]; // need to make path null-terminated
-    std::memcpy(spath, path.data(), path.length());
-    spath[path.length()] = 0;
-
-    FILE* fh = fopen(spath, "rb");
-    if (fh == NULL) return string();
-
-    if (fseek(fh, 0, SEEK_END) != 0) {
-        fclose(fh);
-        return string();
-    }
-
-    auto size = ftell(fh);
-    if (size < 0) {
-        fclose(fh);
-        return string();
-    }
-
-    rewind(fh);
-    string ret(size);
-    size_t readsize = fread(ret.buf(), sizeof(char), size, fh);
-    if (readsize != (size_t)size) return string();
-
-    fclose(fh);
-    ret.length(readsize);
-    return ret;
-}
-
-}}
-
-#if defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__NetBSD__) || defined(__bsdi__) || defined(__DragonFly__) || defined(__linux__) || defined(__APPLE__) || defined(__OpenBSD__)
-    #include "os/unix.icc"
-#elif defined __VMS
-    #include "os/vms.icc"
-#elif defined _WIN32
-    #include "os/win.icc"
-#elif defined(sun) || defined(__sun)
-    #include "os/solaris.icc"
-#else
-    #error "Current operating system is not supported"
-#endif
-
-#ifdef TZDIR
-    #undef  __PTIME_TZDIR
-    #define __TMP_SHIT(name) #name
-    #define __PTIME_TZDIR __TMP_SHIT(TZDIR)
-#endif
+#include "os.icc"
 
 namespace panda { namespace time {
 
 using Timezones = panda::unordered_string_map<string, TimezoneSP>;
+
+static constexpr const char GMT_FALLBACK[] = "GMT0";
 
 static string     _tzdir;
 static string     _tzsysdir = __PTIME_TZDIR;
@@ -218,6 +159,30 @@ static bool _virtual_zone (const string_view& zonename, Timezone* zone) {
     zone->trans[0].leap_lend   = EPOCH_NEGINF;
     zone->ltrans = zone->trans[0];
     return true;
+}
+
+void use_system_timezones () {
+    if (tzsysdir()) tzdir({});
+    else fprintf(stderr, "panda-time[use_system_timezones]: this OS has no olson timezone files, you can't use system zones");
+}
+
+std::vector<string> available_timezones () {
+    auto dir = tzdir();
+    if (!dir) return {};
+    auto dirents = scan_files_recursive(dir);
+    std::vector<string> ret;
+    ret.reserve(dirents.size());
+
+    for (auto& file : dirents) {
+        std::ifstream infile(dir + "/" + file);
+        std::string line;
+        if (!std::getline(infile, line)) continue;
+        if (line.substr(0, 4) != "TZif") continue;
+        if (file.find("posixrules") != string::npos || file.find("Factory") != string::npos) continue;
+        ret.push_back(file);
+    }
+
+    return ret;
 }
 
 }}

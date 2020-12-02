@@ -310,7 +310,7 @@ static inline bool _from_registry (char* lzname) {
 	return true;
 }
 
-static inline bool get_os_localzone_name (char* lzname) {
+static bool get_os_localzone_name (char* lzname) {
     if (_from_registry(lzname)) return true;
     return false;
 }

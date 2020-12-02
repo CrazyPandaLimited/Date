@@ -37,7 +37,7 @@ static inline bool _from_etc_default_init (char* lzname) {
     return _from_regex(lzname, "/etc/default/init", &pattern, 1);
 }
 
-static inline bool get_os_localzone_name (char* lzname) {
+static bool get_os_localzone_name (char* lzname) {
     if (
         _from_etc_localtime(lzname)           ||
         _from_etc_default_init(lzname)
@@ -46,3 +46,5 @@ static inline bool get_os_localzone_name (char* lzname) {
 }
 
 }}
+
+#include "scan_files_unix.icc"
