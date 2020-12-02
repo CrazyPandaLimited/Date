@@ -126,8 +126,9 @@ TEST("tzset") {
     CHECK(tzlocal()->name == "America/New_York");
 }
 
+#ifndef _WIN32
+
 TEST("tzset via ENV{TZ}") {
-    //plan skip_all => "changes to %ENV is not visible to environment on Windows" if $^O eq 'MSWin32';
     setenv("TZ", "Europe/Moscow", 1);
     panda::time::tzset();
     CHECK(tzlocal()->name == "Europe/Moscow");
@@ -140,3 +141,5 @@ TEST("tzset via ENV{TZ}") {
     panda::time::tzset();
     CHECK(tzlocal()->name);
 };
+
+#endif
