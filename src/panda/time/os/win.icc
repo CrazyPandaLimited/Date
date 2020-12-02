@@ -1,5 +1,6 @@
 #include <string>
 #include <windows.h>
+//#include <fileapi.h>
 
 #define __PTIME_TZDIR ""
 
@@ -313,6 +314,38 @@ static inline bool _from_registry (char* lzname) {
 static bool get_os_localzone_name (char* lzname) {
     if (_from_registry(lzname)) return true;
     return false;
+}
+
+static void _scan_files_recursive (const string& dir, const string& prefix, std::vector<string>& list) {
+    WIN32_FIND_DATA ffd;
+    auto hFind = FindFirstFile((dir+'*').c_str(), &ffd);
+    if (hFind == INVALID_HANDLE_VALUE) {
+        if (GetLastError() == ERROR_FILE_NOT_FOUND) return;
+        throw std::runtime_error(std::string("could not open timezones dir '") + dir.c_str() + "'");
+    }
+    
+    do {
+        auto fname = string(ffd.cFileName, strlen(ffd.cFileName));
+        if (fname == "." || fname == "..") continue;
+        
+        if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) _scan_files_recursive(dir + fname + "/", prefix + fname + "/", list);
+        else list.push_back(prefix + fname);
+    } while (FindNextFile(hFind, &ffd));
+    
+    auto dwError = GetLastError();
+    if (dwError != ERROR_NO_MORE_FILES) throw std::runtime_error("could not read timezones dir");
+    
+    FindClose(hFind);
+}
+
+static std::vector<string> scan_files_recursive (string dir) {
+    std::vector<string> ret;
+    
+    if (!dir) dir = "./";
+    else if (dir.back() != '/' && dir.back() != '\\') dir += '/';
+    
+    _scan_files_recursive(dir, "", ret);
+    return ret;
 }
 
 }}
