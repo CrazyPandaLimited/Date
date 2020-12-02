@@ -1,5 +1,4 @@
 #include "time.h"
-#include <stdio.h>
 
 namespace panda { namespace time {
 
@@ -145,6 +144,12 @@ bool gmtime (ptime_t epoch, datetime* result) {
     return false;
 }
 
+datetime gmtime (ptime_t epoch) {
+    datetime ret;
+    if (!gmtime(epoch, &ret)) throw std::invalid_argument("bad epoch");
+    return ret;
+}
+
 ptime_t timegm   (datetime *date)       { return _timegm(date); }
 ptime_t timegml  (datetime *date)       { return _timegml(date); }
 ptime_t timegmll (const datetime *date) { return _timegmll(date); }
@@ -191,8 +196,14 @@ bool anytime (ptime_t epoch, datetime* result, const TimezoneSP& zone) {
             }
             _PTIME_LT_LEAPSEC_CORR(zone->ltrans);
         }
-    };
+    }
     return r;
+}
+
+datetime anytime (ptime_t epoch, const TimezoneSP& zone) {
+    datetime ret;
+    if (!anytime(epoch, &ret, zone)) throw std::invalid_argument("bad epoch");
+    return ret;
 }
 
 ptime_t timeany (datetime* date, const TimezoneSP& zone) {

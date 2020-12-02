@@ -1,9 +1,8 @@
-#include <catch2/catch.hpp>
-#include <panda/time.h>
+#include "../test.h"
 
-using namespace panda::time;
+#define TEST(name) TEST_CASE("time-misc: " name, "[time-misc]")
 
-TEST_CASE("time-api", "[time-api]") {
+TEST("some border cases") {
     auto utc_tz = tzget("UTC");
     SECTION("28-Dec-2018") {
         datetime date;

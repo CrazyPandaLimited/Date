@@ -53,18 +53,21 @@ const string& tzdir    ();
 void          tzdir    (const string&);
 const string& tzsysdir ();
 
-bool    gmtime   (ptime_t epoch, datetime* result);
-ptime_t timegm   (datetime* date);
-ptime_t timegml  (datetime* date);
-ptime_t timegmll (const datetime* date);
+bool     gmtime   (ptime_t epoch, datetime* result);
+datetime gmtime   (ptime_t epoch);
+ptime_t  timegm   (datetime* date);
+ptime_t  timegml  (datetime* date);
+ptime_t  timegmll (const datetime* date);
 
-bool    anytime  (ptime_t epoch, datetime* result, const TimezoneSP& zone);
-ptime_t timeany  (datetime* date, const TimezoneSP& zone);
-ptime_t timeanyl (datetime* date, const TimezoneSP& zone);
+bool     anytime  (ptime_t epoch, datetime* result, const TimezoneSP& zone);
+datetime anytime  (ptime_t epoch, const TimezoneSP& zone);
+ptime_t  timeany  (datetime* date, const TimezoneSP& zone);
+ptime_t  timeanyl (datetime* date, const TimezoneSP& zone);
 
-inline bool    localtime  (ptime_t epoch, datetime* result) { return anytime(epoch, result, tzlocal()); }
-inline ptime_t timelocal  (datetime* date)                  { return timeany(date, tzlocal()); }
-inline ptime_t timelocall (datetime* date)                  { return timeanyl(date, tzlocal()); }
+inline bool     localtime  (ptime_t epoch, datetime* result) { return anytime(epoch, result, tzlocal()); }
+inline datetime localtime  (ptime_t epoch)                   { return anytime(epoch, tzlocal()); }
+inline ptime_t  timelocal  (datetime* date)                  { return timeany(date, tzlocal()); }
+inline ptime_t  timelocall (datetime* date)                  { return timeanyl(date, tzlocal()); }
 
 string strftime (string_view format, const datetime&);
 

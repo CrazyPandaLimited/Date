@@ -54,7 +54,7 @@ TEST("from string") {
     CHECK(date.c_wday() == 0);
     CHECK(date.ewday() == 7);
 
-    TEMPZONE("Europe/Kiev");
+    tzset("Europe/Kiev");
 
     date = Date("2013-09-05 23:45:56");
     CHECK(date.isdst());

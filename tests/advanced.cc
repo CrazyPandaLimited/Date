@@ -19,7 +19,7 @@ TEST("gmtoff") {
     date = Date("2013-09-05 23:04:05");
     CHECK(date.gmtoff() == 14400);
 
-    TEMPZONE("America/New_York");
+    tzset("America/New_York");
     date = Date("2013-09-05 23:45:56");
     CHECK(date.gmtoff() == -14400);
 }
