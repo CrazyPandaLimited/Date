@@ -44,6 +44,7 @@ find_package(Catch2)
 target_link_libraries(tests PUBLIC Catch2::Catch2)
 
 ########################ctests######################################
+enable_testing()
 add_executable(runtests ${testSource} "tests/main.cc")
 target_link_libraries(runtests tests)
 add_test(test-all runtests)

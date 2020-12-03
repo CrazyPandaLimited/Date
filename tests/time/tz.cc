@@ -140,6 +140,34 @@ TEST("tzset via ENV{TZ}") {
     unsetenv("TZ");
     panda::time::tzset();
     CHECK(tzlocal()->name);
-};
+}
 
 #endif
+
+
+TEST("tzdir") {
+    auto now = ::time(NULL);
+    tzset("Europe/Moscow");
+    CHECK(tzlocal()->name == "Europe/Moscow");
+    auto date1 = localtime(now);
+    tzset("America/New_York");
+    CHECK(tzlocal()->name == "America/New_York");
+    auto date2 = localtime(now);
+
+    auto old = tzdir();
+    tzdir("tests/time/testzones");
+
+    CHECK(available_timezones().size() == 2);
+
+    tzset("Moscow");
+    CHECK(tzlocal()->name == "Moscow");
+    CHECK_DATETIME(localtime(now), date1);
+    CHECK(timelocal(&date1) == now);
+
+    tzset("New_York");
+    CHECK(tzlocal()->name == "New_York");
+    CHECK_DATETIME(localtime(now), date2);
+    CHECK(timelocal(&date2) == now);
+
+    tzdir(old);
+}
