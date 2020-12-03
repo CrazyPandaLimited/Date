@@ -8,6 +8,10 @@ static unordered_string_map<string, unordered_string_map<string, string>> test_d
 struct MyListener : Catch::TestEventListenerBase {
     using TestEventListenerBase::TestEventListenerBase;
 
+    void testRunStarting (Catch::TestRunInfo const&) override {
+        tzdir("zoneinfo"); // use embed zones from project directory if not set by perl suite
+    }
+
     void testCaseStarting (Catch::TestCaseInfo const&) override {
         tzset("Europe/Moscow");
     }
