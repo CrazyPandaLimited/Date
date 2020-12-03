@@ -36,6 +36,9 @@ add_library(panda::date ALIAS date)
 ########################tests#######################################
 file(GLOB_RECURSE testSource RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "tests/*.cc")
 list(FILTER testSource EXCLUDE REGEX "tests/main.cc")
+if(WIN32)
+    list(FILTER testSource EXCLUDE REGEX "tests/time/full.cc")
+endif()
 
 add_library(tests STATIC EXCLUDE_FROM_ALL ${testSource})
 target_link_libraries(tests PUBLIC date)

@@ -229,9 +229,6 @@ TEST_CASE("full-timegm") {
     CHECK(test_timegm(0, 200, 200000));
 }
 
-
-#ifndef _WIN32   // windows has no correct system timezones
-
 TEST_CASE("full-localtime") {
     X64ONLY;
     auto old = tzdir();
@@ -411,5 +408,3 @@ TEST_CASE("full-zones-6") { test_all_zones(6); }
 TEST_CASE("full-zones-7") { test_all_zones(7); }
 TEST_CASE("full-zones-8") { test_all_zones(8); }
 TEST_CASE("full-zones-9") { test_all_zones(9); }
-
-#endif
