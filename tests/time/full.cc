@@ -205,7 +205,7 @@ struct Dia {
 };
 using Dias = std::vector<Dia>;
 
-TEST_CASE("full-gmtime") {
+TEST_CASE("full-gmtime", "[.]") {
     X64ONLY;
     CHECK(test_gmtime(  299, epoch_from( 2005),       epoch_from(2008,12,30))); // check normal times
     CHECK(test_gmtime(    1, epoch_from( 2004,12,31), epoch_from(2005)));       // check QUAD YEARS threshold
@@ -217,7 +217,7 @@ TEST_CASE("full-gmtime") {
     CHECK(test_gmtime(0, 20000000000, 1000000));
 }
 
-TEST_CASE("full-timegm") {
+TEST_CASE("full-timegm", "[.]") {
     X64ONLY;
     CHECK(test_timegm( 299, epoch_from(2005),       epoch_from(2008,12,30))); // check normal times
     CHECK(test_timegm(   1, epoch_from(2004,12,31), epoch_from(2005)));       // check QUAD YEARS threshold
@@ -229,7 +229,7 @@ TEST_CASE("full-timegm") {
     CHECK(test_timegm(0, 200, 200000));
 }
 
-TEST_CASE("full-localtime") {
+TEST_CASE("full-localtime", "[.]") {
     X64ONLY;
     auto old = tzdir();
     use_system_timezones();
@@ -261,7 +261,7 @@ TEST_CASE("full-localtime") {
     tzdir(old);
 }
 
-TEST_CASE("full-timelocal") {
+TEST_CASE("full-timelocal", "[.]") {
     X64ONLY;
     auto old = tzdir();
     use_system_timezones();
@@ -290,7 +290,7 @@ TEST_CASE("full-timelocal") {
     tzdir(old);
 }
 
-TEST_CASE("full-leapzone") {
+TEST_CASE("full-leapzone", "[.]") {
     X64ONLY;
     auto old = tzdir();
     use_system_timezones();
@@ -399,12 +399,12 @@ static void test_all_zones (int part) {
     tzdir(old);
 }
 
-TEST_CASE("full-zones-1") { test_all_zones(1); }
-TEST_CASE("full-zones-2") { test_all_zones(2); }
-TEST_CASE("full-zones-3") { test_all_zones(3); }
-TEST_CASE("full-zones-4") { test_all_zones(4); }
-TEST_CASE("full-zones-5") { test_all_zones(5); }
-TEST_CASE("full-zones-6") { test_all_zones(6); }
-TEST_CASE("full-zones-7") { test_all_zones(7); }
-TEST_CASE("full-zones-8") { test_all_zones(8); }
-TEST_CASE("full-zones-9") { test_all_zones(9); }
+TEST_CASE("full-zones-1", "[.]") { test_all_zones(1); }
+TEST_CASE("full-zones-2", "[.]") { test_all_zones(2); }
+TEST_CASE("full-zones-3", "[.]") { test_all_zones(3); }
+TEST_CASE("full-zones-4", "[.]") { test_all_zones(4); }
+TEST_CASE("full-zones-5", "[.]") { test_all_zones(5); }
+TEST_CASE("full-zones-6", "[.]") { test_all_zones(6); }
+TEST_CASE("full-zones-7", "[.]") { test_all_zones(7); }
+TEST_CASE("full-zones-8", "[.]") { test_all_zones(8); }
+TEST_CASE("full-zones-9", "[.]") { test_all_zones(9); }

@@ -3,12 +3,19 @@
 
 #define TEST(name) TEST_CASE("time-strftime: " name, "[time-strftime]")
 
-auto d1 = mkdt(2019, 11, 9, 20, 34, 56);
-auto d2 = mkdt(1983, 6, 15, 1, 2, 3);
-auto e1 = timelocal(&d1);
-auto e2 = timelocal(&d2);
+
+static ptime_t e2() {
+    static auto d2 = mkdt(1983, 6, 15, 1, 2, 3);
+    static auto ret = timelocal(&d2);
+    return ret;
+}
 
 static void test (string_view fmt, string_view val1, string_view val2 = "EPTA", const function<void()>& custom = {}) {
+    static auto d1 = mkdt(2019, 11, 9, 20, 34, 56);
+    static auto d2 = mkdt(1983, 6, 15, 1, 2, 3);
+    timelocal(&d1);
+    timelocal(&d2);
+
     if (val2 == "EPTA") val2 = val1;
     SECTION(string("'") + fmt + "'") {
         CHECK(strftime(fmt, d1) == val1);
@@ -46,8 +53,8 @@ TEST("modifiers") {
     test("%S", "56", "03"); // second[00-59]
     test("%t", "\t"); // tab character
     test("%T", "20:34:56", "01:02:03"); // HH:MM:SS
-    test("%u", "1", "5", []{ CHECK(strftime("%u", localtime(e2 + 86400*2)) == "7"); }); // wday [1-7, Mon-Sun]
-    test("%w", "1", "5", []{ CHECK(strftime("%w", localtime(e2 + 86400*2)) == "0"); }); // wday [0-6, Sun-Sat]
+    test("%u", "1", "5", []{ CHECK(strftime("%u", localtime(e2() + 86400*2)) == "7"); }); // wday [1-7, Mon-Sun]
+    test("%w", "1", "5", []{ CHECK(strftime("%w", localtime(e2() + 86400*2)) == "0"); }); // wday [0-6, Sun-Sat]
     test("%X", "20:34:56", "01:02:03"); // preferred HMS style
     test("%y", "19", "83"); // yr[00-99]
     test("%Y", "2019", "1983"); // year[0000-9999]
