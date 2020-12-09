@@ -1,16 +1,15 @@
 cmake_minimum_required(VERSION 3.0)
 project(panda-date VERSION 2.1.1 LANGUAGES CXX)
-enable_testing()
 
 set(LIB_TYPE STATIC)
 
 file(GLOB_RECURSE libSource RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "src/panda/*.cc")
-add_library(date ${LIB_TYPE} ${libSource})
-target_include_directories(date PUBLIC
+add_library(${PROJECT_NAME} ${LIB_TYPE} ${libSource})
+target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:include>
 )
-set_target_properties(date PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO
@@ -29,9 +28,7 @@ if (ragel_bin)
 endif()
 
 find_package(panda-lib REQUIRED)
-target_link_libraries(date panda::panda-lib)
-
-add_library(panda::date ALIAS date)
+target_link_libraries(${PROJECT_NAME} panda-lib)
 
 ########################tests#######################################
 file(GLOB_RECURSE testSource RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "tests/*.cc")
@@ -41,7 +38,7 @@ if(WIN32)
 endif()
 
 add_library(tests STATIC EXCLUDE_FROM_ALL ${testSource})
-target_link_libraries(tests PUBLIC date)
+target_link_libraries(tests PUBLIC ${PROJECT_NAME})
 
 find_package(Catch2)
 target_link_libraries(tests PUBLIC Catch2::Catch2)
@@ -54,12 +51,12 @@ add_test(NAME test-all COMMAND runtests WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE
 
 ########################install#####################################
 install(DIRECTORY src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
-install(TARGETS date EXPORT date-targets ARCHIVE DESTINATION lib)
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}-targets ARCHIVE DESTINATION lib)
 
-install(EXPORT date-targets
-    FILE panda-date-targets.cmake
+install(EXPORT ${PROJECT_NAME}-targets
+    FILE ${PROJECT_NAME}-targets.cmake
     NAMESPACE panda::
-    DESTINATION lib/cmake/panda-date
+    DESTINATION lib/cmake/${PROJECT_NAME}
 )
 
-install(FILES panda-date-config.cmake DESTINATION lib/cmake/panda-date)
+install(FILES ${PROJECT_NAME}-config.cmake DESTINATION lib/cmake/${PROJECT_NAME})

@@ -1,3 +1,3 @@
-if (NOT TARGET panda::date)
-    include(date-targets)
+if (NOT TARGET panda-date)
+    include(panda-date-targets)
 endif()
