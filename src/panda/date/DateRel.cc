@@ -73,6 +73,7 @@ string DateRel::to_string (Format fmt) const {
                 ptr += len;
                 *ptr++ = '/';
             }
+            // fall through
         case Format::iso8601d:
             *ptr++ = 'P';
             if (_year ) { relstr_val(ptr, _year, 'Y'); }
