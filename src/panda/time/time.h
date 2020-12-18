@@ -54,6 +54,14 @@ const string& tzdir    ();
 void          tzdir    (const string&);
 const string& tzsysdir ();
 
+inline string tzembededdir() {
+#ifdef PANDA_DATE_ZONEINFO_DIR
+    return PANDA_DATE_ZONEINFO_DIR;
+#else
+    return "zoneinfo";
+#endif
+}
+
 void use_system_timezones ();
 std::vector<string> available_timezones ();
 

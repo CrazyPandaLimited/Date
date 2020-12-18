@@ -9,7 +9,7 @@ struct MyListener : Catch::TestEventListenerBase {
     using TestEventListenerBase::TestEventListenerBase;
 
     void testRunStarting (Catch::TestRunInfo const&) override {
-        tzdir("zoneinfo"); // use embed zones from project directory if not set by perl suite
+        tzdir(tzembededdir()); // use embed zones from project directory if not set by perl suite
         if (tzget("Europe/Moscow")->name != "Europe/Moscow") {
             throw std::runtime_error("no embeded zones");
         }
