@@ -16,7 +16,6 @@ static constexpr const char GMT_FALLBACK[] = "GMT0";
 
 static string     _tzdir;
 static string     _tzsysdir = __PTIME_TZDIR;
-static Timezones  _tzcache;
 static TimezoneSP _localzone;
 
 static TimezoneSP _tzget (const string_view& zname);
@@ -31,6 +30,8 @@ const TimezoneSP& tzlocal () {
 
 TimezoneSP tzget (const string_view& zonename) {
     if (!zonename.length()) return tzlocal();
+
+    static Timezones  _tzcache;
     auto it = _tzcache.find(zonename);
     if (it != _tzcache.cend()) return it->second;
     auto strname = string(zonename);
