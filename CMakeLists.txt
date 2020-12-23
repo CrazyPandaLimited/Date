@@ -15,8 +15,8 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 set_source_files_properties(src/panda/date/parse-date.cc     PROPERTIES COMPILE_FLAGS -Wno-implicit-fallthrough)
 set_source_files_properties(src/panda/date/parse-relative.cc PROPERTIES COMPILE_FLAGS -Wno-implicit-fallthrough)
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC
-    $<INSTALL_INTERFACE:PANDA_DATE_ZONEINFO_DIR="$<INSTALL_PREFIX>/share/zoneinfo">
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    PANDA_DATE_ZONEINFO_DIR="${CMAKE_INSTALL_PREFIX}/share/zoneinfo"
 )
 message(STATUS ${CMAKE_SYSTEM_PREFIX_PATH})
 
@@ -44,8 +44,6 @@ endif()
 
 add_library(tests STATIC EXCLUDE_FROM_ALL ${testSource})
 target_link_libraries(tests PUBLIC ${PROJECT_NAME})
-
-target_compile_definitions(tests PUBLIC PANDA_DATE_ZONEINFO_DIR="${CMAKE_CURRENT_LIST_DIR}/zoneinfo")
 
 find_package(Catch2)
 target_link_libraries(tests PUBLIC Catch2::Catch2)

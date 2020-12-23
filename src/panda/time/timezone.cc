@@ -16,6 +16,7 @@ static constexpr const char GMT_FALLBACK[] = "GMT0";
 
 static string     _tzdir;
 static string     _tzsysdir = __PTIME_TZDIR;
+static string     _tzembededdir = PANDA_DATE_ZONEINFO_DIR;
 static TimezoneSP _localzone;
 
 static TimezoneSP _tzget (const string_view& zname);
@@ -62,6 +63,9 @@ void tzset (const string_view& zonename) {
 const string& tzsysdir ()                  { return _tzsysdir; }
 const string& tzdir    ()                  { return _tzdir ? _tzdir : _tzsysdir; }
 void          tzdir    (const string& dir) { _tzdir = dir; }
+
+const string& tzembededdir()                         { return _tzembededdir; }
+void          tzembededdir(const panda::string& dir) { _tzembededdir = dir;  }
 
 bool tzparse      (const string_view&, Timezone*);
 bool tzparse_rule (const string_view&, Timezone::Rule*);
@@ -165,6 +169,15 @@ static bool _virtual_zone (const string_view& zonename, Timezone* zone) {
 void use_system_timezones () {
     if (tzsysdir()) tzdir({});
     else fprintf(stderr, "panda-time[use_system_timezones]: this OS has no olson timezone files, you can't use system zones");
+}
+
+void use_embed_timezones() {
+    auto old = tzdir();
+    tzdir(_tzembededdir);
+    if (tzget("America/New_York")->name != "America/New_York") {
+        tzdir(old);
+        fprintf(stderr, "panda-time[use_embeded_timezones]: embeded timezones hasn't been found");
+    }
 }
 
 std::vector<string> available_timezones () {
