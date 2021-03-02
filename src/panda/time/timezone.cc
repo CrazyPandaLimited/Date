@@ -1,5 +1,6 @@
 #include "time.h"
 #include <map>
+#include <thread>
 #include <assert.h>
 #include <stdlib.h>
 #include <fstream>
@@ -14,10 +15,11 @@ using Timezones = panda::unordered_string_map<string, TimezoneSP>;
 
 static constexpr const char GMT_FALLBACK[] = "GMT0";
 
-static string     _tzdir;
-static string     _tzsysdir = __PTIME_TZDIR;
-static string     _tzembededdir = PANDA_DATE_ZONEINFO_DIR;
-static TimezoneSP _localzone;
+static string          _tzdir;
+static string          _tzsysdir = __PTIME_TZDIR;
+static string          _tzembededdir = PANDA_DATE_ZONEINFO_DIR;
+static TimezoneSP      _localzone;
+static std::thread::id _mt_id = std::this_thread::get_id();
 
 static TimezoneSP _tzget (const string_view& zname);
 
@@ -29,15 +31,29 @@ const TimezoneSP& tzlocal () {
     return _localzone;
 }
 
+static Timezones& get_tzcache () {
+    if (std::this_thread::get_id() == _mt_id) {
+        static Timezones tzcache;
+        return tzcache;
+    } else {
+        static thread_local Timezones* tzcache = nullptr;
+        if (!tzcache) {
+            static thread_local Timezones _tzcache;
+            tzcache = &_tzcache;
+        }
+        return *tzcache;
+    }
+}
+
 TimezoneSP tzget (const string_view& zonename) {
     if (!zonename.length()) return tzlocal();
 
-    static Timezones  _tzcache;
-    auto it = _tzcache.find(zonename);
-    if (it != _tzcache.cend()) return it->second;
+    auto& tzcache = get_tzcache();
+    auto it = tzcache.find(zonename);
+    if (it != tzcache.cend()) return it->second;
     auto strname = string(zonename);
     auto zone = _tzget(strname);
-    _tzcache.emplace(strname, zone);
+    tzcache.emplace(strname, zone);
     return zone;
 }
 
