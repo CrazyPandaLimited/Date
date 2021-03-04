@@ -1,5 +1,6 @@
 #include "time.h"
 #include <map>
+#include <mutex>
 #include <thread>
 #include <assert.h>
 #include <stdlib.h>
@@ -15,11 +16,54 @@ using Timezones = panda::unordered_string_map<string, TimezoneSP>;
 
 static constexpr const char GMT_FALLBACK[] = "GMT0";
 
-static string          _tzdir;
-static string          _tzsysdir = __PTIME_TZDIR;
-static string          _tzembededdir = PANDA_DATE_ZONEINFO_DIR;
-static TimezoneSP      _localzone;
-static std::thread::id _mt_id = std::this_thread::get_id();
+static string _tzdir;
+static string _tzsysdir = __PTIME_TZDIR;
+static string _tzembededdir = PANDA_DATE_ZONEINFO_DIR;
+
+struct Data {
+    uint64_t   rev = 0;
+    TimezoneSP localzone;
+};
+
+struct Glob {
+    std::recursive_mutex mtx;
+    Data src_data;
+    Data mt_data;
+    std::thread::id mt_id = std::this_thread::get_id();
+};
+
+static inline Glob& get_glob () {
+    static Glob glob;
+    return glob;
+}
+
+static inline Data& get_data () {
+    auto& glob = get_glob();
+    if (std::this_thread::get_id() == glob.mt_id) {
+        return glob.mt_data;
+    }
+
+    thread_local Data* ct_data = nullptr;
+    if (!ct_data) { // TLS via pointers works 3x faster in GCC
+        thread_local Data _ct_data;
+        ct_data = &_ct_data;
+    }
+
+    return *ct_data;
+}
+
+#define SYNC_LOCK std::lock_guard<std::recursive_mutex> guard(get_glob().mtx);
+
+static inline Data& get_synced_data () {
+    auto& data = get_data();
+
+    if (data.rev != get_glob().src_data.rev) { // data changed by some thread
+        SYNC_LOCK;
+        data = get_glob().src_data;
+    }
+
+    return data;
+}
 
 static TimezoneSP _tzget (const string_view& zname);
 
@@ -27,12 +71,13 @@ static bool _virtual_zone     (const string_view& zonename, Timezone* zone);
 static void _virtual_fallback (Timezone* zone);
 
 const TimezoneSP& tzlocal () {
-    if (!_localzone) tzset();
-    return _localzone;
+    auto& data = get_synced_data();
+    if (!data.localzone) tzset();
+    return data.localzone;
 }
 
 static Timezones& get_tzcache () {
-    if (std::this_thread::get_id() == _mt_id) {
+    if (std::this_thread::get_id() == get_glob().mt_id) {
         static Timezones tzcache;
         return tzcache;
     } else {
@@ -65,10 +110,14 @@ void tzset (const TimezoneSP& _zone) {
         if (etzname.length()) zone = tzget(etzname);
         else zone = _tzget("");
     }
-    if (_localzone == zone) return;
-    if (_localzone) _localzone->is_local = false;
-    _localzone = zone;
-    _localzone->is_local = true;
+    SYNC_LOCK;
+    auto& src = get_glob().src_data;
+    if (src.localzone == zone) return;
+    if (src.localzone) src.localzone->is_local = false;
+    src.localzone = zone;
+    src.localzone->is_local = true;
+    ++src.rev;
+    get_data() = src;
 }
 
 void tzset (const string_view& zonename) {

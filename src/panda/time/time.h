@@ -108,7 +108,7 @@ inline uint8_t wday (int32_t year, uint8_t month, uint8_t mday) {
     return (1 + christ_days(year, month, mday)) % 7; // "1" because 1 Jan 0001 was monday :)
 }
 
-struct Timezone : panda::Refcnt {
+struct Timezone : panda::AtomicRefcnt {
     struct Transition {
         ptime_t start;        // time of transition
         ptime_t local_start;  // local time of transition (epoch+offset).

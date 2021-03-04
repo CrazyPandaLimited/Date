@@ -130,17 +130,17 @@ struct Date {
     bool              has_date   () const { return _has_date; }
     bool              normalized () const { return _normalized; }
     std::error_code   error      () const { return _error; }
-    const TimezoneSP& timezone   () const { return _zone; }
+    const TimezoneSP& timezone   () const { return _zone ? _zone : tzlocal(); }
 
     void timezone (const TimezoneSP& zone) {
         dcheck();
-        _zone = zone ? zone : tzlocal();
+        _zone = zone;
         dchg_auto();
     }
 
     void to_timezone (const TimezoneSP& zone) {
         echeck();
-        _zone = zone ? zone : tzlocal();
+        _zone = zone;
         echg();
     }
 
@@ -312,8 +312,7 @@ private:
     }
 
     void _zone_set (const TimezoneSP& zone) {
-        if (!_zone) _zone = zone ? zone : tzlocal();
-        else if (zone) _zone = zone;
+        if (zone) _zone = zone;
     }
 };
 
