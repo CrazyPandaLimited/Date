@@ -31,7 +31,6 @@ ptime_t Date::today_epoch () {
 void Date::set (string_view str, const TimezoneSP& zone, int fmt) {
     if (zone) _zone = zone;
     parse(str, fmt); // parse() can parse and create zone
-    if (!_zone) _zone = tzlocal();
 
     if (_error == errc::ok) {
         _has_date = true;
@@ -86,18 +85,18 @@ void Date::set (const Date& source, const TimezoneSP& zone) {
 
 void Date::esync () const { // w/o date normalization
     _has_epoch = true;
-    _epoch = timeanyl(&_date, _zone);
+    _epoch = timeanyl(&_date, timezone());
 }
 
 void Date::dsync () const {
     _normalized = true;
     if (_has_epoch) { // no date -> calculate from epoch
         _has_date = true;
-        bool success = anytime(_epoch, &_date, _zone);
+        bool success = anytime(_epoch, &_date, timezone());
         if (!success) error_set(errc::out_of_range);
     } else { // no epoch -> normalize from date (set epoch as a side effect as well)
         _has_epoch = true;
-        _epoch = timeany(&_date, _zone);
+        _epoch = timeany(&_date, timezone());
     }
 }
 
