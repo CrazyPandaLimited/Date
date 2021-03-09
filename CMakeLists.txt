@@ -52,7 +52,8 @@ add_library(tests STATIC EXCLUDE_FROM_ALL ${testSource})
 target_link_libraries(tests PUBLIC ${PROJECT_NAME})
 
 find_package(Catch2)
-target_link_libraries(tests PUBLIC Catch2::Catch2)
+find_package(Threads)
+target_link_libraries(tests PUBLIC Catch2::Catch2 Threads::Threads)
 
 ########################ctests######################################
 enable_testing()
