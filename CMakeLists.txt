@@ -18,8 +18,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)
 
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
-set_source_files_properties(src/panda/date/parse-date.cc     PROPERTIES COMPILE_FLAGS -Wno-implicit-fallthrough)
-set_source_files_properties(src/panda/date/parse-relative.cc PROPERTIES COMPILE_FLAGS -Wno-implicit-fallthrough)
+set_source_files_properties(src/panda/date/parse-date.cc     PROPERTIES COMPILE_FLAGS "-Wno-implicit-fallthrough -Wno-unused-const-variable")
+set_source_files_properties(src/panda/date/parse-relative.cc PROPERTIES COMPILE_FLAGS "-Wno-implicit-fallthrough -Wno-unused-const-variable")
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     PANDA_DATE_ZONEINFO_DIR="${CMAKE_INSTALL_PREFIX}/share/zoneinfo"
@@ -43,6 +43,7 @@ target_link_libraries(${PROJECT_NAME} panda-lib)
 
 ########################tests#######################################
 file(GLOB_RECURSE testSource RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "tests/*.cc")
+set_source_files_properties(tests/relative/operations.cc PROPERTIES COMPILE_FLAGS "-Wno-self-assign-overloaded")
 list(FILTER testSource EXCLUDE REGEX "tests/main.cc")
 if(WIN32)
     list(FILTER testSource EXCLUDE REGEX "tests/time/full.cc")
