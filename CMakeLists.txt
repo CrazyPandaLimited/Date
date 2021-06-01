@@ -20,6 +20,7 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 set_source_files_properties(src/panda/date/parse-date.cc     PROPERTIES COMPILE_FLAGS -Wno-implicit-fallthrough)
 set_source_files_properties(src/panda/date/parse-relative.cc PROPERTIES COMPILE_FLAGS -Wno-implicit-fallthrough)
+set_source_files_properties(src/panda/date/strptime.cc       PROPERTIES COMPILE_FLAGS -Wno-implicit-fallthrough)
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     PANDA_DATE_ZONEINFO_DIR="${CMAKE_INSTALL_PREFIX}/share/zoneinfo"
@@ -28,7 +29,8 @@ message(STATUS ${CMAKE_SYSTEM_PREFIX_PATH})
 
 find_program(ragel_bin ragel)
 if (ragel_bin)
-    foreach(fpath src/panda/date/parse-date src/panda/date/parse-relative)
+    set(RL_DIR "src/panda/date")
+    foreach(fpath ${RL_DIR}/parse-date ${RL_DIR}/parse-relative ${RL_DIR}/strptime)
         add_custom_command(
             OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/${fpath}.cc
             COMMAND ragel -C -G2 ${fpath}.rl -o ${fpath}.cc

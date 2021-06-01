@@ -80,6 +80,8 @@ struct Date {
     }
 
     Date (const Date& source, const TimezoneSP& zone = {}) { set(source, zone); }
+    Date (string_view str, string_view fmt);
+
 
     void set (ptime_t ep, const TimezoneSP& zone = {}) {
         _zone_set(zone);
@@ -280,6 +282,7 @@ private:
     mutable uint32_t _mksec;
 
     void parse (string_view, int);
+    void strptime(string_view, string_view);
 
     void esync () const;
     void dsync () const;
