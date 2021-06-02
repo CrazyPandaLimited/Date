@@ -27,6 +27,7 @@ struct MetaConsume {
     action day     { NSAVE(_date.mday); }
     action wday    { NSAVE(_date.wday)  }
     action yday    { NSAVE(_date.mday); }
+    action week    { NSAVE(week); }
     action month   { _date.mon = acc - 1; acc = 0; }
     action done    { fbreak; }
 
@@ -75,6 +76,7 @@ struct MetaConsume {
     p_day_void := P_day_nn | (" " digit $digit) @day @done;
     p_wday     := digit{1} $digit @wday @done;
     p_wname    := P_wname %done;
+    p_wnum     := nn @week @done;
     p_month    := nn @month @done;
     p_mname    := P_mname %done;
     p_year     := digit{4} $digit @year @done;
@@ -86,7 +88,7 @@ struct MetaConsume {
 
 %% write data;
 
-static inline int _parse_str(int cs, const char* p, const char* pe, datetime& _date)  {
+static inline int _parse_str(int cs, const char* p, const char* pe, unsigned& week, datetime& _date)  {
     // printf("_parse_str cs=%d\n", cs);
     const char* pb  = p;
     const char* eof = pe;
@@ -109,6 +111,8 @@ static inline int _parse_str(int cs, const char* p, const char* pe, datetime& _d
     m_day3      = '%j' @{ p_cs = parser_en_p_day3;      fbreak; };
     m_wday      = '%w' @{ p_cs = parser_en_p_wday;      fbreak; };
     m_wname     = ('%a' | '%A') @{ p_cs = parser_en_p_wname; fbreak; };
+    m_wnum      = '%W' @{ p_cs = parser_en_p_wnum; fbreak; };
+    m_wnum_m    = '%U' @{ p_cs = parser_en_p_wnum; beginning_weekday_offset = 1; fbreak; };
     m_hour      = ('%H' | '%I') @{ p_cs = parser_en_p_hour;      fbreak; };
     m_month     = '%m' @{ p_cs = parser_en_p_month;     fbreak; };
     m_mname     = ('%b' | '%B' | '%h')  @{ p_cs = parser_en_p_mname;     fbreak; };
@@ -123,7 +127,7 @@ static inline int _parse_str(int cs, const char* p, const char* pe, datetime& _d
     m_space_enc = ('%t' | '%n') @{ p_cs = parser_en_p_space;  fbreak; };
     m_space     = (' ' | '\t')+  @{ p_cs = parser_en_p_space; fbreak; };
 
-    m_main := m_space | m_space_enc | m_perc | m_yr | m_ampm | m_cent | m_day3 | m_mname |
+    m_main := m_space | m_space_enc | m_perc | m_yr | m_ampm | m_cent | m_day3 | m_mname | m_wnum | m_wnum_m |
               m_year | m_month | m_day | m_wday | m_wname | m_hour | m_min | m_sec |
               m_hour_min | m_hms | m_mdy | m_mdyhms | m_hmsampm
            ;
@@ -131,7 +135,7 @@ static inline int _parse_str(int cs, const char* p, const char* pe, datetime& _d
 
 %% write data;
 
-static inline MetaConsume _parse_meta(const char* p, const char* pe)  {
+static inline MetaConsume _parse_meta(const char* p, const char* pe, unsigned& beginning_weekday_offset)  {
     const char* pb     = p;
     const char* eof    = pe;
     int         cs     = meta_parser_en_m_main;
@@ -150,6 +154,9 @@ void Date::strptime (string_view str, string_view format) {
     _error = errc::ok;
     _mksec = 0;
 
+    unsigned week = 0;
+    unsigned beginning_weekday_offset = 0;
+
     const char* m_p = format.data();
     const char* m_e = m_p + format.length();
     const char* s_p = str.data();
@@ -157,9 +164,9 @@ void Date::strptime (string_view str, string_view format) {
 
     while((m_p != m_e) && (s_p != s_e)) {
         // printf("cycle, meta='%s', str='%s'\n", m_p, s_p);
-        auto meta_result = _parse_meta(m_p, m_e);
+        auto meta_result = _parse_meta(m_p, m_e, beginning_weekday_offset);
         if (meta_result.cs) {
-            int consumed = _parse_str(meta_result.cs, s_p, s_e, _date);
+            int consumed = _parse_str(meta_result.cs, s_p, s_e, week, _date);
             if (consumed >= 0) {
                 s_p += consumed;
             } else {
@@ -178,6 +185,11 @@ void Date::strptime (string_view str, string_view format) {
         }
         m_p += meta_result.consumed;
     }
+
+    if (m_p == m_e && s_p == s_e) {
+        _post_parse_week(week, beginning_weekday_offset);
+    }
+
 }
 
 }}

@@ -13,13 +13,13 @@ struct MetaConsume {
 };
 
 
-#line 85 "src/panda/date/strptime.rl"
+#line 87 "src/panda/date/strptime.rl"
 
 
 
 #line 21 "src/panda/date/strptime.cc"
-static const int parser_start = 160;
-static const int parser_first_final = 160;
+static const int parser_start = 162;
+static const int parser_first_final = 162;
 static const int parser_error = 0;
 
 static const int parser_en_p_ampm = 1;
@@ -36,36 +36,37 @@ static const int parser_en_p_day3 = 62;
 static const int parser_en_p_day_void = 65;
 static const int parser_en_p_wday = 67;
 static const int parser_en_p_wname = 68;
-static const int parser_en_p_month = 103;
-static const int parser_en_p_mname = 105;
-static const int parser_en_p_year = 151;
-static const int parser_en_p_yr = 155;
-static const int parser_en_p_cent = 157;
-static const int parser_en_p_perc = 159;
-static const int parser_en_p_space = 160;
+static const int parser_en_p_wnum = 103;
+static const int parser_en_p_month = 105;
+static const int parser_en_p_mname = 107;
+static const int parser_en_p_year = 153;
+static const int parser_en_p_yr = 157;
+static const int parser_en_p_cent = 159;
+static const int parser_en_p_perc = 161;
+static const int parser_en_p_space = 162;
 
 
-#line 88 "src/panda/date/strptime.rl"
+#line 90 "src/panda/date/strptime.rl"
 
-static inline int _parse_str(int cs, const char* p, const char* pe, datetime& _date)  {
+static inline int _parse_str(int cs, const char* p, const char* pe, unsigned& week, datetime& _date)  {
     // printf("_parse_str cs=%d\n", cs);
     const char* pb  = p;
     const char* eof = pe;
     uint64_t    acc = 0;
 
     
-#line 58 "src/panda/date/strptime.cc"
+#line 59 "src/panda/date/strptime.cc"
 	{
 	if ( p == pe )
 		goto _test_eof;
 	switch ( cs )
 	{
-st160:
+st162:
 	if ( ++p == pe )
-		goto _test_eof160;
-case 160:
+		goto _test_eof162;
+case 162:
 	if ( (*p) == 32 )
-		goto st160;
+		goto st162;
 	goto st0;
 st0:
 cs = 0;
@@ -84,20 +85,20 @@ case 2:
 		goto tr3;
 	goto st0;
 tr3:
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 161; goto _out;} }
-	goto st161;
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 163; goto _out;} }
+	goto st163;
 tr4:
 #line 26 "src/panda/date/strptime.rl"
 	{ _date.hour += 12;  }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 161; goto _out;} }
-	goto st161;
-st161:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 163; goto _out;} }
+	goto st163;
+st163:
 	if ( ++p == pe )
-		goto _test_eof161;
-case 161:
-#line 101 "src/panda/date/strptime.cc"
+		goto _test_eof163;
+case 163:
+#line 102 "src/panda/date/strptime.cc"
 	goto st0;
 st3:
 	if ( ++p == pe )
@@ -121,7 +122,7 @@ st5:
 	if ( ++p == pe )
 		goto _test_eof5;
 case 5:
-#line 125 "src/panda/date/strptime.cc"
+#line 126 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr6;
 	goto st0;
@@ -133,14 +134,14 @@ tr6:
     }
 #line 23 "src/panda/date/strptime.rl"
 	{ NSAVE(_date.sec);  }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 162; goto _out;} }
-	goto st162;
-st162:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 164; goto _out;} }
+	goto st164;
+st164:
 	if ( ++p == pe )
-		goto _test_eof162;
-case 162:
-#line 144 "src/panda/date/strptime.cc"
+		goto _test_eof164;
+case 164:
+#line 145 "src/panda/date/strptime.cc"
 	goto st0;
 case 6:
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -157,7 +158,7 @@ st7:
 	if ( ++p == pe )
 		goto _test_eof7;
 case 7:
-#line 161 "src/panda/date/strptime.cc"
+#line 162 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr8;
 	goto st0;
@@ -169,14 +170,14 @@ tr8:
     }
 #line 24 "src/panda/date/strptime.rl"
 	{ NSAVE(_date.min);  }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 163; goto _out;} }
-	goto st163;
-st163:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 165; goto _out;} }
+	goto st165;
+st165:
 	if ( ++p == pe )
-		goto _test_eof163;
-case 163:
-#line 180 "src/panda/date/strptime.cc"
+		goto _test_eof165;
+case 165:
+#line 181 "src/panda/date/strptime.cc"
 	goto st0;
 case 8:
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -193,7 +194,7 @@ st9:
 	if ( ++p == pe )
 		goto _test_eof9;
 case 9:
-#line 197 "src/panda/date/strptime.cc"
+#line 198 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr10;
 	goto st0;
@@ -205,14 +206,14 @@ tr10:
     }
 #line 25 "src/panda/date/strptime.rl"
 	{ NSAVE(_date.hour); }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 164; goto _out;} }
-	goto st164;
-st164:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 166; goto _out;} }
+	goto st166;
+st166:
 	if ( ++p == pe )
-		goto _test_eof164;
-case 164:
-#line 216 "src/panda/date/strptime.cc"
+		goto _test_eof166;
+case 166:
+#line 217 "src/panda/date/strptime.cc"
 	goto st0;
 case 10:
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -229,7 +230,7 @@ st11:
 	if ( ++p == pe )
 		goto _test_eof11;
 case 11:
-#line 233 "src/panda/date/strptime.cc"
+#line 234 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr12;
 	goto st0;
@@ -246,7 +247,7 @@ st12:
 	if ( ++p == pe )
 		goto _test_eof12;
 case 12:
-#line 250 "src/panda/date/strptime.cc"
+#line 251 "src/panda/date/strptime.cc"
 	if ( (*p) == 58 )
 		goto st13;
 	goto st0;
@@ -268,7 +269,7 @@ st14:
 	if ( ++p == pe )
 		goto _test_eof14;
 case 14:
-#line 272 "src/panda/date/strptime.cc"
+#line 273 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr15;
 	goto st0;
@@ -280,14 +281,14 @@ tr15:
     }
 #line 24 "src/panda/date/strptime.rl"
 	{ NSAVE(_date.min);  }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 165; goto _out;} }
-	goto st165;
-st165:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 167; goto _out;} }
+	goto st167;
+st167:
 	if ( ++p == pe )
-		goto _test_eof165;
-case 165:
-#line 291 "src/panda/date/strptime.cc"
+		goto _test_eof167;
+case 167:
+#line 292 "src/panda/date/strptime.cc"
 	goto st0;
 case 15:
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -304,7 +305,7 @@ st16:
 	if ( ++p == pe )
 		goto _test_eof16;
 case 16:
-#line 308 "src/panda/date/strptime.cc"
+#line 309 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr17;
 	goto st0;
@@ -321,7 +322,7 @@ st17:
 	if ( ++p == pe )
 		goto _test_eof17;
 case 17:
-#line 325 "src/panda/date/strptime.cc"
+#line 326 "src/panda/date/strptime.cc"
 	if ( (*p) == 58 )
 		goto st18;
 	goto st0;
@@ -343,7 +344,7 @@ st19:
 	if ( ++p == pe )
 		goto _test_eof19;
 case 19:
-#line 347 "src/panda/date/strptime.cc"
+#line 348 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr20;
 	goto st0;
@@ -360,7 +361,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 364 "src/panda/date/strptime.cc"
+#line 365 "src/panda/date/strptime.cc"
 	if ( (*p) == 58 )
 		goto st21;
 	goto st0;
@@ -382,7 +383,7 @@ st22:
 	if ( ++p == pe )
 		goto _test_eof22;
 case 22:
-#line 386 "src/panda/date/strptime.cc"
+#line 387 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr23;
 	goto st0;
@@ -394,14 +395,14 @@ tr23:
     }
 #line 23 "src/panda/date/strptime.rl"
 	{ NSAVE(_date.sec);  }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 166; goto _out;} }
-	goto st166;
-st166:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 168; goto _out;} }
+	goto st168;
+st168:
 	if ( ++p == pe )
-		goto _test_eof166;
-case 166:
-#line 405 "src/panda/date/strptime.cc"
+		goto _test_eof168;
+case 168:
+#line 406 "src/panda/date/strptime.cc"
 	goto st0;
 case 23:
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -418,7 +419,7 @@ st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 422 "src/panda/date/strptime.cc"
+#line 423 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr25;
 	goto st0;
@@ -435,7 +436,7 @@ st25:
 	if ( ++p == pe )
 		goto _test_eof25;
 case 25:
-#line 439 "src/panda/date/strptime.cc"
+#line 440 "src/panda/date/strptime.cc"
 	if ( (*p) == 58 )
 		goto st26;
 	goto st0;
@@ -457,7 +458,7 @@ st27:
 	if ( ++p == pe )
 		goto _test_eof27;
 case 27:
-#line 461 "src/panda/date/strptime.cc"
+#line 462 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr28;
 	goto st0;
@@ -474,7 +475,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 478 "src/panda/date/strptime.cc"
+#line 479 "src/panda/date/strptime.cc"
 	if ( (*p) == 58 )
 		goto st29;
 	goto st0;
@@ -496,7 +497,7 @@ st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 500 "src/panda/date/strptime.cc"
+#line 501 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr31;
 	goto st0;
@@ -513,7 +514,7 @@ st31:
 	if ( ++p == pe )
 		goto _test_eof31;
 case 31:
-#line 517 "src/panda/date/strptime.cc"
+#line 518 "src/panda/date/strptime.cc"
 	if ( (*p) == 32 )
 		goto st32;
 	goto st0;
@@ -535,20 +536,20 @@ case 33:
 		goto tr35;
 	goto st0;
 tr35:
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 167; goto _out;} }
-	goto st167;
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 169; goto _out;} }
+	goto st169;
 tr36:
 #line 26 "src/panda/date/strptime.rl"
 	{ _date.hour += 12;  }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 167; goto _out;} }
-	goto st167;
-st167:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 169; goto _out;} }
+	goto st169;
+st169:
 	if ( ++p == pe )
-		goto _test_eof167;
-case 167:
-#line 552 "src/panda/date/strptime.cc"
+		goto _test_eof169;
+case 169:
+#line 553 "src/panda/date/strptime.cc"
 	goto st0;
 st34:
 	if ( ++p == pe )
@@ -572,7 +573,7 @@ st36:
 	if ( ++p == pe )
 		goto _test_eof36;
 case 36:
-#line 576 "src/panda/date/strptime.cc"
+#line 577 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr38;
 	goto st0;
@@ -582,14 +583,14 @@ tr38:
         acc *= 10;
         acc += (*p) - '0';
     }
-#line 30 "src/panda/date/strptime.rl"
+#line 31 "src/panda/date/strptime.rl"
 	{ _date.mon = acc - 1; acc = 0; }
 	goto st37;
 st37:
 	if ( ++p == pe )
 		goto _test_eof37;
 case 37:
-#line 593 "src/panda/date/strptime.cc"
+#line 594 "src/panda/date/strptime.cc"
 	if ( (*p) == 47 )
 		goto st38;
 	goto st0;
@@ -611,7 +612,7 @@ st39:
 	if ( ++p == pe )
 		goto _test_eof39;
 case 39:
-#line 615 "src/panda/date/strptime.cc"
+#line 616 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr41;
 	goto st0;
@@ -628,7 +629,7 @@ st40:
 	if ( ++p == pe )
 		goto _test_eof40;
 case 40:
-#line 632 "src/panda/date/strptime.cc"
+#line 633 "src/panda/date/strptime.cc"
 	if ( (*p) == 47 )
 		goto st41;
 	goto st0;
@@ -650,7 +651,7 @@ st42:
 	if ( ++p == pe )
 		goto _test_eof42;
 case 42:
-#line 654 "src/panda/date/strptime.cc"
+#line 655 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr44;
 	goto st0;
@@ -660,20 +661,20 @@ tr44:
         acc *= 10;
         acc += (*p) - '0';
     }
-#line 33 "src/panda/date/strptime.rl"
+#line 34 "src/panda/date/strptime.rl"
 	{
         if (acc <= 50) _date.year = 2000 + acc;
         else           _date.year = 1900 + acc;
         acc = 0;
     }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 168; goto _out;} }
-	goto st168;
-st168:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 170; goto _out;} }
+	goto st170;
+st170:
 	if ( ++p == pe )
-		goto _test_eof168;
-case 168:
-#line 677 "src/panda/date/strptime.cc"
+		goto _test_eof170;
+case 170:
+#line 678 "src/panda/date/strptime.cc"
 	goto st0;
 case 43:
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -690,7 +691,7 @@ st44:
 	if ( ++p == pe )
 		goto _test_eof44;
 case 44:
-#line 694 "src/panda/date/strptime.cc"
+#line 695 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr46;
 	goto st0;
@@ -700,14 +701,14 @@ tr46:
         acc *= 10;
         acc += (*p) - '0';
     }
-#line 30 "src/panda/date/strptime.rl"
+#line 31 "src/panda/date/strptime.rl"
 	{ _date.mon = acc - 1; acc = 0; }
 	goto st45;
 st45:
 	if ( ++p == pe )
 		goto _test_eof45;
 case 45:
-#line 711 "src/panda/date/strptime.cc"
+#line 712 "src/panda/date/strptime.cc"
 	if ( (*p) == 47 )
 		goto st46;
 	goto st0;
@@ -729,7 +730,7 @@ st47:
 	if ( ++p == pe )
 		goto _test_eof47;
 case 47:
-#line 733 "src/panda/date/strptime.cc"
+#line 734 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr49;
 	goto st0;
@@ -746,7 +747,7 @@ st48:
 	if ( ++p == pe )
 		goto _test_eof48;
 case 48:
-#line 750 "src/panda/date/strptime.cc"
+#line 751 "src/panda/date/strptime.cc"
 	if ( (*p) == 47 )
 		goto st49;
 	goto st0;
@@ -768,7 +769,7 @@ st50:
 	if ( ++p == pe )
 		goto _test_eof50;
 case 50:
-#line 772 "src/panda/date/strptime.cc"
+#line 773 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr52;
 	goto st0;
@@ -778,7 +779,7 @@ tr52:
         acc *= 10;
         acc += (*p) - '0';
     }
-#line 33 "src/panda/date/strptime.rl"
+#line 34 "src/panda/date/strptime.rl"
 	{
         if (acc <= 50) _date.year = 2000 + acc;
         else           _date.year = 1900 + acc;
@@ -789,7 +790,7 @@ st51:
 	if ( ++p == pe )
 		goto _test_eof51;
 case 51:
-#line 793 "src/panda/date/strptime.cc"
+#line 794 "src/panda/date/strptime.cc"
 	if ( (*p) == 32 )
 		goto st52;
 	goto st0;
@@ -813,7 +814,7 @@ st53:
 	if ( ++p == pe )
 		goto _test_eof53;
 case 53:
-#line 817 "src/panda/date/strptime.cc"
+#line 818 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr55;
 	goto st0;
@@ -830,7 +831,7 @@ st54:
 	if ( ++p == pe )
 		goto _test_eof54;
 case 54:
-#line 834 "src/panda/date/strptime.cc"
+#line 835 "src/panda/date/strptime.cc"
 	if ( (*p) == 58 )
 		goto st55;
 	goto st0;
@@ -852,7 +853,7 @@ st56:
 	if ( ++p == pe )
 		goto _test_eof56;
 case 56:
-#line 856 "src/panda/date/strptime.cc"
+#line 857 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr58;
 	goto st0;
@@ -869,7 +870,7 @@ st57:
 	if ( ++p == pe )
 		goto _test_eof57;
 case 57:
-#line 873 "src/panda/date/strptime.cc"
+#line 874 "src/panda/date/strptime.cc"
 	if ( (*p) == 58 )
 		goto st58;
 	goto st0;
@@ -891,7 +892,7 @@ st59:
 	if ( ++p == pe )
 		goto _test_eof59;
 case 59:
-#line 895 "src/panda/date/strptime.cc"
+#line 896 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr61;
 	goto st0;
@@ -903,14 +904,14 @@ tr61:
     }
 #line 23 "src/panda/date/strptime.rl"
 	{ NSAVE(_date.sec);  }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 169; goto _out;} }
-	goto st169;
-st169:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 171; goto _out;} }
+	goto st171;
+st171:
 	if ( ++p == pe )
-		goto _test_eof169;
-case 169:
-#line 914 "src/panda/date/strptime.cc"
+		goto _test_eof171;
+case 171:
+#line 915 "src/panda/date/strptime.cc"
 	goto st0;
 case 60:
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -927,7 +928,7 @@ st61:
 	if ( ++p == pe )
 		goto _test_eof61;
 case 61:
-#line 931 "src/panda/date/strptime.cc"
+#line 932 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr63;
 	goto st0;
@@ -939,14 +940,14 @@ tr63:
     }
 #line 27 "src/panda/date/strptime.rl"
 	{ NSAVE(_date.mday); }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 170; goto _out;} }
-	goto st170;
-st170:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 172; goto _out;} }
+	goto st172;
+st172:
 	if ( ++p == pe )
-		goto _test_eof170;
-case 170:
-#line 950 "src/panda/date/strptime.cc"
+		goto _test_eof172;
+case 172:
+#line 951 "src/panda/date/strptime.cc"
 	goto st0;
 case 62:
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -963,7 +964,7 @@ st63:
 	if ( ++p == pe )
 		goto _test_eof63;
 case 63:
-#line 967 "src/panda/date/strptime.cc"
+#line 968 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr65;
 	goto st0;
@@ -978,7 +979,7 @@ st64:
 	if ( ++p == pe )
 		goto _test_eof64;
 case 64:
-#line 982 "src/panda/date/strptime.cc"
+#line 983 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr66;
 	goto st0;
@@ -990,14 +991,14 @@ tr66:
     }
 #line 29 "src/panda/date/strptime.rl"
 	{ NSAVE(_date.mday); }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 171; goto _out;} }
-	goto st171;
-st171:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 173; goto _out;} }
+	goto st173;
+st173:
 	if ( ++p == pe )
-		goto _test_eof171;
-case 171:
-#line 1001 "src/panda/date/strptime.cc"
+		goto _test_eof173;
+case 173:
+#line 1002 "src/panda/date/strptime.cc"
 	goto st0;
 case 65:
 	if ( (*p) == 32 )
@@ -1016,7 +1017,7 @@ st66:
 	if ( ++p == pe )
 		goto _test_eof66;
 case 66:
-#line 1020 "src/panda/date/strptime.cc"
+#line 1021 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr69;
 	goto st0;
@@ -1028,14 +1029,14 @@ tr69:
     }
 #line 27 "src/panda/date/strptime.rl"
 	{ NSAVE(_date.mday); }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 172; goto _out;} }
-	goto st172;
-st172:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 174; goto _out;} }
+	goto st174;
+st174:
 	if ( ++p == pe )
-		goto _test_eof172;
-case 172:
-#line 1039 "src/panda/date/strptime.cc"
+		goto _test_eof174;
+case 174:
+#line 1040 "src/panda/date/strptime.cc"
 	goto st0;
 case 67:
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -1049,14 +1050,14 @@ tr70:
     }
 #line 28 "src/panda/date/strptime.rl"
 	{ NSAVE(_date.wday)  }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 173; goto _out;} }
-	goto st173;
-st173:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 175; goto _out;} }
+	goto st175;
+st175:
 	if ( ++p == pe )
-		goto _test_eof173;
-case 173:
-#line 1060 "src/panda/date/strptime.cc"
+		goto _test_eof175;
+case 175:
+#line 1061 "src/panda/date/strptime.cc"
 	goto st0;
 case 68:
 	switch( (*p) ) {
@@ -1082,14 +1083,14 @@ case 70:
 		goto tr77;
 	goto st0;
 tr77:
-#line 46 "src/panda/date/strptime.rl"
+#line 47 "src/panda/date/strptime.rl"
 	{ _date.wday = 5; }
-	goto st174;
-st174:
+	goto st176;
+st176:
 	if ( ++p == pe )
-		goto _test_eof174;
-case 174:
-#line 1093 "src/panda/date/strptime.cc"
+		goto _test_eof176;
+case 176:
+#line 1094 "src/panda/date/strptime.cc"
 	if ( (*p) == 100 )
 		goto st71;
 	goto st0;
@@ -1108,38 +1109,38 @@ case 72:
 		goto tr79;
 	goto st0;
 tr79:
-#line 46 "src/panda/date/strptime.rl"
-	{ _date.wday = 5; }
-	goto st175;
-tr83:
-#line 42 "src/panda/date/strptime.rl"
-	{ _date.wday = 1; }
-	goto st175;
-tr90:
 #line 47 "src/panda/date/strptime.rl"
-	{ _date.wday = 6; }
-	goto st175;
-tr93:
-#line 48 "src/panda/date/strptime.rl"
-	{ _date.wday = 0; }
-	goto st175;
-tr100:
-#line 45 "src/panda/date/strptime.rl"
-	{ _date.wday = 4; }
-	goto st175;
-tr104:
+	{ _date.wday = 5; }
+	goto st177;
+tr83:
 #line 43 "src/panda/date/strptime.rl"
-	{ _date.wday = 2; }
-	goto st175;
-tr111:
+	{ _date.wday = 1; }
+	goto st177;
+tr90:
+#line 48 "src/panda/date/strptime.rl"
+	{ _date.wday = 6; }
+	goto st177;
+tr93:
+#line 49 "src/panda/date/strptime.rl"
+	{ _date.wday = 0; }
+	goto st177;
+tr100:
+#line 46 "src/panda/date/strptime.rl"
+	{ _date.wday = 4; }
+	goto st177;
+tr104:
 #line 44 "src/panda/date/strptime.rl"
+	{ _date.wday = 2; }
+	goto st177;
+tr111:
+#line 45 "src/panda/date/strptime.rl"
 	{ _date.wday = 3; }
-	goto st175;
-st175:
+	goto st177;
+st177:
 	if ( ++p == pe )
-		goto _test_eof175;
-case 175:
-#line 1143 "src/panda/date/strptime.cc"
+		goto _test_eof177;
+case 177:
+#line 1144 "src/panda/date/strptime.cc"
 	goto st0;
 st73:
 	if ( ++p == pe )
@@ -1156,14 +1157,14 @@ case 74:
 		goto tr81;
 	goto st0;
 tr81:
-#line 42 "src/panda/date/strptime.rl"
+#line 43 "src/panda/date/strptime.rl"
 	{ _date.wday = 1; }
-	goto st176;
-st176:
+	goto st178;
+st178:
 	if ( ++p == pe )
-		goto _test_eof176;
-case 176:
-#line 1167 "src/panda/date/strptime.cc"
+		goto _test_eof178;
+case 178:
+#line 1168 "src/panda/date/strptime.cc"
 	if ( (*p) == 100 )
 		goto st75;
 	goto st0;
@@ -1198,14 +1199,14 @@ case 78:
 		goto tr86;
 	goto st0;
 tr86:
-#line 47 "src/panda/date/strptime.rl"
+#line 48 "src/panda/date/strptime.rl"
 	{ _date.wday = 6; }
-	goto st177;
-st177:
+	goto st179;
+st179:
 	if ( ++p == pe )
-		goto _test_eof177;
-case 177:
-#line 1209 "src/panda/date/strptime.cc"
+		goto _test_eof179;
+case 179:
+#line 1210 "src/panda/date/strptime.cc"
 	if ( (*p) == 117 )
 		goto st79;
 	goto st0;
@@ -1245,14 +1246,14 @@ case 83:
 		goto tr91;
 	goto st0;
 tr91:
-#line 48 "src/panda/date/strptime.rl"
+#line 49 "src/panda/date/strptime.rl"
 	{ _date.wday = 0; }
-	goto st178;
-st178:
+	goto st180;
+st180:
 	if ( ++p == pe )
-		goto _test_eof178;
-case 178:
-#line 1256 "src/panda/date/strptime.cc"
+		goto _test_eof180;
+case 180:
+#line 1257 "src/panda/date/strptime.cc"
 	if ( (*p) == 100 )
 		goto st84;
 	goto st0;
@@ -1287,14 +1288,14 @@ case 87:
 		goto tr96;
 	goto st0;
 tr96:
-#line 45 "src/panda/date/strptime.rl"
+#line 46 "src/panda/date/strptime.rl"
 	{ _date.wday = 4; }
-	goto st179;
-st179:
+	goto st181;
+st181:
 	if ( ++p == pe )
-		goto _test_eof179;
-case 179:
-#line 1298 "src/panda/date/strptime.cc"
+		goto _test_eof181;
+case 181:
+#line 1299 "src/panda/date/strptime.cc"
 	if ( (*p) == 114 )
 		goto st88;
 	goto st0;
@@ -1334,14 +1335,14 @@ case 92:
 		goto tr101;
 	goto st0;
 tr101:
-#line 43 "src/panda/date/strptime.rl"
+#line 44 "src/panda/date/strptime.rl"
 	{ _date.wday = 2; }
-	goto st180;
-st180:
+	goto st182;
+st182:
 	if ( ++p == pe )
-		goto _test_eof180;
-case 180:
-#line 1345 "src/panda/date/strptime.cc"
+		goto _test_eof182;
+case 182:
+#line 1346 "src/panda/date/strptime.cc"
 	if ( (*p) == 115 )
 		goto st93;
 	goto st0;
@@ -1381,14 +1382,14 @@ case 97:
 		goto tr106;
 	goto st0;
 tr106:
-#line 44 "src/panda/date/strptime.rl"
+#line 45 "src/panda/date/strptime.rl"
 	{ _date.wday = 3; }
-	goto st181;
-st181:
+	goto st183;
+st183:
 	if ( ++p == pe )
-		goto _test_eof181;
-case 181:
-#line 1392 "src/panda/date/strptime.cc"
+		goto _test_eof183;
+case 183:
+#line 1393 "src/panda/date/strptime.cc"
 	if ( (*p) == 110 )
 		goto st98;
 	goto st0;
@@ -1442,7 +1443,7 @@ st104:
 	if ( ++p == pe )
 		goto _test_eof104;
 case 104:
-#line 1446 "src/panda/date/strptime.cc"
+#line 1447 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr113;
 	goto st0;
@@ -1453,203 +1454,225 @@ tr113:
         acc += (*p) - '0';
     }
 #line 30 "src/panda/date/strptime.rl"
-	{ _date.mon = acc - 1; acc = 0; }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 182; goto _out;} }
-	goto st182;
-st182:
-	if ( ++p == pe )
-		goto _test_eof182;
-case 182:
-#line 1465 "src/panda/date/strptime.cc"
-	goto st0;
-case 105:
-	switch( (*p) ) {
-		case 65: goto st106;
-		case 68: goto st112;
-		case 70: goto st118;
-		case 74: goto st124;
-		case 77: goto st130;
-		case 78: goto st133;
-		case 79: goto st139;
-		case 83: goto st144;
-	}
-	goto st0;
-st106:
-	if ( ++p == pe )
-		goto _test_eof106;
-case 106:
-	switch( (*p) ) {
-		case 112: goto st107;
-		case 117: goto st109;
-	}
-	goto st0;
-st107:
-	if ( ++p == pe )
-		goto _test_eof107;
-case 107:
-	if ( (*p) == 114 )
-		goto tr124;
-	goto st0;
-tr124:
-#line 53 "src/panda/date/strptime.rl"
-	{ _date.mon = 3; }
-	goto st183;
-st183:
-	if ( ++p == pe )
-		goto _test_eof183;
-case 183:
-#line 1503 "src/panda/date/strptime.cc"
-	if ( (*p) == 105 )
-		goto st108;
-	goto st0;
-st108:
-	if ( ++p == pe )
-		goto _test_eof108;
-case 108:
-	if ( (*p) == 108 )
-		goto tr125;
-	goto st0;
-tr125:
-#line 53 "src/panda/date/strptime.rl"
-	{ _date.mon = 3; }
-	goto st184;
-tr128:
-#line 57 "src/panda/date/strptime.rl"
-	{ _date.mon = 7; }
-	goto st184;
-tr134:
-#line 61 "src/panda/date/strptime.rl"
-	{ _date.mon = 11;}
-	goto st184;
-tr140:
-#line 51 "src/panda/date/strptime.rl"
-	{ _date.mon = 1; }
-	goto st184;
-tr146:
-#line 50 "src/panda/date/strptime.rl"
-	{ _date.mon = 0; }
-	goto st184;
-tr193:
-#line 56 "src/panda/date/strptime.rl"
-	{ _date.mon = 6; }
-	goto st184;
-tr194:
-#line 55 "src/panda/date/strptime.rl"
-	{ _date.mon = 5; }
-	goto st184;
-tr152:
-#line 52 "src/panda/date/strptime.rl"
-	{ _date.mon = 2; }
-	goto st184;
-tr151:
-#line 54 "src/panda/date/strptime.rl"
-	{ _date.mon = 4; }
-	goto st184;
-tr158:
-#line 60 "src/panda/date/strptime.rl"
-	{ _date.mon = 10;}
-	goto st184;
-tr163:
-#line 59 "src/panda/date/strptime.rl"
-	{ _date.mon = 9; }
-	goto st184;
-tr170:
-#line 58 "src/panda/date/strptime.rl"
-	{ _date.mon = 8; }
+	{ NSAVE(week); }
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 184; goto _out;} }
 	goto st184;
 st184:
 	if ( ++p == pe )
 		goto _test_eof184;
 case 184:
-#line 1566 "src/panda/date/strptime.cc"
+#line 1466 "src/panda/date/strptime.cc"
 	goto st0;
-st109:
+case 105:
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr114;
+	goto st0;
+tr114:
+#line 16 "src/panda/date/strptime.rl"
+	{
+        acc *= 10;
+        acc += (*p) - '0';
+    }
+	goto st106;
+st106:
 	if ( ++p == pe )
-		goto _test_eof109;
-case 109:
-	if ( (*p) == 103 )
-		goto tr126;
+		goto _test_eof106;
+case 106:
+#line 1483 "src/panda/date/strptime.cc"
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr115;
 	goto st0;
-tr126:
-#line 57 "src/panda/date/strptime.rl"
-	{ _date.mon = 7; }
+tr115:
+#line 16 "src/panda/date/strptime.rl"
+	{
+        acc *= 10;
+        acc += (*p) - '0';
+    }
+#line 31 "src/panda/date/strptime.rl"
+	{ _date.mon = acc - 1; acc = 0; }
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 185; goto _out;} }
 	goto st185;
 st185:
 	if ( ++p == pe )
 		goto _test_eof185;
 case 185:
-#line 1583 "src/panda/date/strptime.cc"
-	if ( (*p) == 117 )
+#line 1502 "src/panda/date/strptime.cc"
+	goto st0;
+case 107:
+	switch( (*p) ) {
+		case 65: goto st108;
+		case 68: goto st114;
+		case 70: goto st120;
+		case 74: goto st126;
+		case 77: goto st132;
+		case 78: goto st135;
+		case 79: goto st141;
+		case 83: goto st146;
+	}
+	goto st0;
+st108:
+	if ( ++p == pe )
+		goto _test_eof108;
+case 108:
+	switch( (*p) ) {
+		case 112: goto st109;
+		case 117: goto st111;
+	}
+	goto st0;
+st109:
+	if ( ++p == pe )
+		goto _test_eof109;
+case 109:
+	if ( (*p) == 114 )
+		goto tr126;
+	goto st0;
+tr126:
+#line 54 "src/panda/date/strptime.rl"
+	{ _date.mon = 3; }
+	goto st186;
+st186:
+	if ( ++p == pe )
+		goto _test_eof186;
+case 186:
+#line 1540 "src/panda/date/strptime.cc"
+	if ( (*p) == 105 )
 		goto st110;
 	goto st0;
 st110:
 	if ( ++p == pe )
 		goto _test_eof110;
 case 110:
-	if ( (*p) == 115 )
-		goto st111;
+	if ( (*p) == 108 )
+		goto tr127;
+	goto st0;
+tr127:
+#line 54 "src/panda/date/strptime.rl"
+	{ _date.mon = 3; }
+	goto st187;
+tr130:
+#line 58 "src/panda/date/strptime.rl"
+	{ _date.mon = 7; }
+	goto st187;
+tr136:
+#line 62 "src/panda/date/strptime.rl"
+	{ _date.mon = 11;}
+	goto st187;
+tr142:
+#line 52 "src/panda/date/strptime.rl"
+	{ _date.mon = 1; }
+	goto st187;
+tr148:
+#line 51 "src/panda/date/strptime.rl"
+	{ _date.mon = 0; }
+	goto st187;
+tr195:
+#line 57 "src/panda/date/strptime.rl"
+	{ _date.mon = 6; }
+	goto st187;
+tr196:
+#line 56 "src/panda/date/strptime.rl"
+	{ _date.mon = 5; }
+	goto st187;
+tr154:
+#line 53 "src/panda/date/strptime.rl"
+	{ _date.mon = 2; }
+	goto st187;
+tr153:
+#line 55 "src/panda/date/strptime.rl"
+	{ _date.mon = 4; }
+	goto st187;
+tr160:
+#line 61 "src/panda/date/strptime.rl"
+	{ _date.mon = 10;}
+	goto st187;
+tr165:
+#line 60 "src/panda/date/strptime.rl"
+	{ _date.mon = 9; }
+	goto st187;
+tr172:
+#line 59 "src/panda/date/strptime.rl"
+	{ _date.mon = 8; }
+	goto st187;
+st187:
+	if ( ++p == pe )
+		goto _test_eof187;
+case 187:
+#line 1603 "src/panda/date/strptime.cc"
 	goto st0;
 st111:
 	if ( ++p == pe )
 		goto _test_eof111;
 case 111:
-	if ( (*p) == 116 )
+	if ( (*p) == 103 )
 		goto tr128;
+	goto st0;
+tr128:
+#line 58 "src/panda/date/strptime.rl"
+	{ _date.mon = 7; }
+	goto st188;
+st188:
+	if ( ++p == pe )
+		goto _test_eof188;
+case 188:
+#line 1620 "src/panda/date/strptime.cc"
+	if ( (*p) == 117 )
+		goto st112;
 	goto st0;
 st112:
 	if ( ++p == pe )
 		goto _test_eof112;
 case 112:
-	if ( (*p) == 101 )
+	if ( (*p) == 115 )
 		goto st113;
 	goto st0;
 st113:
 	if ( ++p == pe )
 		goto _test_eof113;
 case 113:
-	if ( (*p) == 99 )
+	if ( (*p) == 116 )
 		goto tr130;
-	goto st0;
-tr130:
-#line 61 "src/panda/date/strptime.rl"
-	{ _date.mon = 11;}
-	goto st186;
-st186:
-	if ( ++p == pe )
-		goto _test_eof186;
-case 186:
-#line 1623 "src/panda/date/strptime.cc"
-	if ( (*p) == 101 )
-		goto st114;
 	goto st0;
 st114:
 	if ( ++p == pe )
 		goto _test_eof114;
 case 114:
-	if ( (*p) == 109 )
+	if ( (*p) == 101 )
 		goto st115;
 	goto st0;
 st115:
 	if ( ++p == pe )
 		goto _test_eof115;
 case 115:
-	if ( (*p) == 98 )
+	if ( (*p) == 99 )
+		goto tr132;
+	goto st0;
+tr132:
+#line 62 "src/panda/date/strptime.rl"
+	{ _date.mon = 11;}
+	goto st189;
+st189:
+	if ( ++p == pe )
+		goto _test_eof189;
+case 189:
+#line 1660 "src/panda/date/strptime.cc"
+	if ( (*p) == 101 )
 		goto st116;
 	goto st0;
 st116:
 	if ( ++p == pe )
 		goto _test_eof116;
 case 116:
-	if ( (*p) == 101 )
+	if ( (*p) == 109 )
 		goto st117;
 	goto st0;
 st117:
 	if ( ++p == pe )
 		goto _test_eof117;
 case 117:
-	if ( (*p) == 114 )
-		goto tr134;
+	if ( (*p) == 98 )
+		goto st118;
 	goto st0;
 st118:
 	if ( ++p == pe )
@@ -1662,266 +1685,266 @@ st119:
 	if ( ++p == pe )
 		goto _test_eof119;
 case 119:
-	if ( (*p) == 98 )
-		goto tr136;
-	goto st0;
-tr136:
-#line 51 "src/panda/date/strptime.rl"
-	{ _date.mon = 1; }
-	goto st187;
-st187:
-	if ( ++p == pe )
-		goto _test_eof187;
-case 187:
-#line 1677 "src/panda/date/strptime.cc"
 	if ( (*p) == 114 )
-		goto st120;
+		goto tr136;
 	goto st0;
 st120:
 	if ( ++p == pe )
 		goto _test_eof120;
 case 120:
-	if ( (*p) == 117 )
+	if ( (*p) == 101 )
 		goto st121;
 	goto st0;
 st121:
 	if ( ++p == pe )
 		goto _test_eof121;
 case 121:
-	if ( (*p) == 97 )
+	if ( (*p) == 98 )
+		goto tr138;
+	goto st0;
+tr138:
+#line 52 "src/panda/date/strptime.rl"
+	{ _date.mon = 1; }
+	goto st190;
+st190:
+	if ( ++p == pe )
+		goto _test_eof190;
+case 190:
+#line 1714 "src/panda/date/strptime.cc"
+	if ( (*p) == 114 )
 		goto st122;
 	goto st0;
 st122:
 	if ( ++p == pe )
 		goto _test_eof122;
 case 122:
-	if ( (*p) == 114 )
+	if ( (*p) == 117 )
 		goto st123;
 	goto st0;
 st123:
 	if ( ++p == pe )
 		goto _test_eof123;
 case 123:
-	if ( (*p) == 121 )
-		goto tr140;
+	if ( (*p) == 97 )
+		goto st124;
 	goto st0;
 st124:
 	if ( ++p == pe )
 		goto _test_eof124;
 case 124:
-	switch( (*p) ) {
-		case 97: goto st125;
-		case 117: goto st129;
-	}
+	if ( (*p) == 114 )
+		goto st125;
 	goto st0;
 st125:
 	if ( ++p == pe )
 		goto _test_eof125;
 case 125:
-	if ( (*p) == 110 )
-		goto tr143;
-	goto st0;
-tr143:
-#line 50 "src/panda/date/strptime.rl"
-	{ _date.mon = 0; }
-	goto st188;
-st188:
-	if ( ++p == pe )
-		goto _test_eof188;
-case 188:
-#line 1733 "src/panda/date/strptime.cc"
-	if ( (*p) == 117 )
-		goto st126;
+	if ( (*p) == 121 )
+		goto tr142;
 	goto st0;
 st126:
 	if ( ++p == pe )
 		goto _test_eof126;
 case 126:
-	if ( (*p) == 97 )
-		goto st127;
+	switch( (*p) ) {
+		case 97: goto st127;
+		case 117: goto st131;
+	}
 	goto st0;
 st127:
 	if ( ++p == pe )
 		goto _test_eof127;
 case 127:
-	if ( (*p) == 114 )
+	if ( (*p) == 110 )
+		goto tr145;
+	goto st0;
+tr145:
+#line 51 "src/panda/date/strptime.rl"
+	{ _date.mon = 0; }
+	goto st191;
+st191:
+	if ( ++p == pe )
+		goto _test_eof191;
+case 191:
+#line 1770 "src/panda/date/strptime.cc"
+	if ( (*p) == 117 )
 		goto st128;
 	goto st0;
 st128:
 	if ( ++p == pe )
 		goto _test_eof128;
 case 128:
-	if ( (*p) == 121 )
-		goto tr146;
+	if ( (*p) == 97 )
+		goto st129;
 	goto st0;
 st129:
 	if ( ++p == pe )
 		goto _test_eof129;
 case 129:
-	switch( (*p) ) {
-		case 108: goto tr147;
-		case 110: goto tr148;
-	}
-	goto st0;
-tr147:
-#line 56 "src/panda/date/strptime.rl"
-	{ _date.mon = 6; }
-	goto st189;
-st189:
-	if ( ++p == pe )
-		goto _test_eof189;
-case 189:
-#line 1775 "src/panda/date/strptime.cc"
-	if ( (*p) == 121 )
-		goto tr193;
-	goto st0;
-tr148:
-#line 55 "src/panda/date/strptime.rl"
-	{ _date.mon = 5; }
-	goto st190;
-st190:
-	if ( ++p == pe )
-		goto _test_eof190;
-case 190:
-#line 1787 "src/panda/date/strptime.cc"
-	if ( (*p) == 101 )
-		goto tr194;
+	if ( (*p) == 114 )
+		goto st130;
 	goto st0;
 st130:
 	if ( ++p == pe )
 		goto _test_eof130;
 case 130:
-	if ( (*p) == 97 )
-		goto st131;
+	if ( (*p) == 121 )
+		goto tr148;
 	goto st0;
 st131:
 	if ( ++p == pe )
 		goto _test_eof131;
 case 131:
 	switch( (*p) ) {
-		case 114: goto tr150;
-		case 121: goto tr151;
+		case 108: goto tr149;
+		case 110: goto tr150;
 	}
 	goto st0;
-tr150:
-#line 52 "src/panda/date/strptime.rl"
-	{ _date.mon = 2; }
-	goto st191;
-st191:
+tr149:
+#line 57 "src/panda/date/strptime.rl"
+	{ _date.mon = 6; }
+	goto st192;
+st192:
 	if ( ++p == pe )
-		goto _test_eof191;
-case 191:
-#line 1815 "src/panda/date/strptime.cc"
-	if ( (*p) == 99 )
-		goto st132;
+		goto _test_eof192;
+case 192:
+#line 1812 "src/panda/date/strptime.cc"
+	if ( (*p) == 121 )
+		goto tr195;
+	goto st0;
+tr150:
+#line 56 "src/panda/date/strptime.rl"
+	{ _date.mon = 5; }
+	goto st193;
+st193:
+	if ( ++p == pe )
+		goto _test_eof193;
+case 193:
+#line 1824 "src/panda/date/strptime.cc"
+	if ( (*p) == 101 )
+		goto tr196;
 	goto st0;
 st132:
 	if ( ++p == pe )
 		goto _test_eof132;
 case 132:
-	if ( (*p) == 104 )
-		goto tr152;
+	if ( (*p) == 97 )
+		goto st133;
 	goto st0;
 st133:
 	if ( ++p == pe )
 		goto _test_eof133;
 case 133:
-	if ( (*p) == 111 )
+	switch( (*p) ) {
+		case 114: goto tr152;
+		case 121: goto tr153;
+	}
+	goto st0;
+tr152:
+#line 53 "src/panda/date/strptime.rl"
+	{ _date.mon = 2; }
+	goto st194;
+st194:
+	if ( ++p == pe )
+		goto _test_eof194;
+case 194:
+#line 1852 "src/panda/date/strptime.cc"
+	if ( (*p) == 99 )
 		goto st134;
 	goto st0;
 st134:
 	if ( ++p == pe )
 		goto _test_eof134;
 case 134:
-	if ( (*p) == 118 )
+	if ( (*p) == 104 )
 		goto tr154;
-	goto st0;
-tr154:
-#line 60 "src/panda/date/strptime.rl"
-	{ _date.mon = 10;}
-	goto st192;
-st192:
-	if ( ++p == pe )
-		goto _test_eof192;
-case 192:
-#line 1848 "src/panda/date/strptime.cc"
-	if ( (*p) == 101 )
-		goto st135;
 	goto st0;
 st135:
 	if ( ++p == pe )
 		goto _test_eof135;
 case 135:
-	if ( (*p) == 109 )
+	if ( (*p) == 111 )
 		goto st136;
 	goto st0;
 st136:
 	if ( ++p == pe )
 		goto _test_eof136;
 case 136:
-	if ( (*p) == 98 )
+	if ( (*p) == 118 )
+		goto tr156;
+	goto st0;
+tr156:
+#line 61 "src/panda/date/strptime.rl"
+	{ _date.mon = 10;}
+	goto st195;
+st195:
+	if ( ++p == pe )
+		goto _test_eof195;
+case 195:
+#line 1885 "src/panda/date/strptime.cc"
+	if ( (*p) == 101 )
 		goto st137;
 	goto st0;
 st137:
 	if ( ++p == pe )
 		goto _test_eof137;
 case 137:
-	if ( (*p) == 101 )
+	if ( (*p) == 109 )
 		goto st138;
 	goto st0;
 st138:
 	if ( ++p == pe )
 		goto _test_eof138;
 case 138:
-	if ( (*p) == 114 )
-		goto tr158;
+	if ( (*p) == 98 )
+		goto st139;
 	goto st0;
 st139:
 	if ( ++p == pe )
 		goto _test_eof139;
 case 139:
-	if ( (*p) == 99 )
+	if ( (*p) == 101 )
 		goto st140;
 	goto st0;
 st140:
 	if ( ++p == pe )
 		goto _test_eof140;
 case 140:
-	if ( (*p) == 116 )
+	if ( (*p) == 114 )
 		goto tr160;
-	goto st0;
-tr160:
-#line 59 "src/panda/date/strptime.rl"
-	{ _date.mon = 9; }
-	goto st193;
-st193:
-	if ( ++p == pe )
-		goto _test_eof193;
-case 193:
-#line 1902 "src/panda/date/strptime.cc"
-	if ( (*p) == 111 )
-		goto st141;
 	goto st0;
 st141:
 	if ( ++p == pe )
 		goto _test_eof141;
 case 141:
-	if ( (*p) == 98 )
+	if ( (*p) == 99 )
 		goto st142;
 	goto st0;
 st142:
 	if ( ++p == pe )
 		goto _test_eof142;
 case 142:
-	if ( (*p) == 101 )
+	if ( (*p) == 116 )
+		goto tr162;
+	goto st0;
+tr162:
+#line 60 "src/panda/date/strptime.rl"
+	{ _date.mon = 9; }
+	goto st196;
+st196:
+	if ( ++p == pe )
+		goto _test_eof196;
+case 196:
+#line 1939 "src/panda/date/strptime.cc"
+	if ( (*p) == 111 )
 		goto st143;
 	goto st0;
 st143:
 	if ( ++p == pe )
 		goto _test_eof143;
 case 143:
-	if ( (*p) == 114 )
-		goto tr163;
+	if ( (*p) == 98 )
+		goto st144;
 	goto st0;
 st144:
 	if ( ++p == pe )
@@ -1934,20 +1957,8 @@ st145:
 	if ( ++p == pe )
 		goto _test_eof145;
 case 145:
-	if ( (*p) == 112 )
+	if ( (*p) == 114 )
 		goto tr165;
-	goto st0;
-tr165:
-#line 58 "src/panda/date/strptime.rl"
-	{ _date.mon = 8; }
-	goto st194;
-st194:
-	if ( ++p == pe )
-		goto _test_eof194;
-case 194:
-#line 1949 "src/panda/date/strptime.cc"
-	if ( (*p) == 116 )
-		goto st146;
 	goto st0;
 st146:
 	if ( ++p == pe )
@@ -1960,61 +1971,57 @@ st147:
 	if ( ++p == pe )
 		goto _test_eof147;
 case 147:
-	if ( (*p) == 109 )
+	if ( (*p) == 112 )
+		goto tr167;
+	goto st0;
+tr167:
+#line 59 "src/panda/date/strptime.rl"
+	{ _date.mon = 8; }
+	goto st197;
+st197:
+	if ( ++p == pe )
+		goto _test_eof197;
+case 197:
+#line 1986 "src/panda/date/strptime.cc"
+	if ( (*p) == 116 )
 		goto st148;
 	goto st0;
 st148:
 	if ( ++p == pe )
 		goto _test_eof148;
 case 148:
-	if ( (*p) == 98 )
+	if ( (*p) == 101 )
 		goto st149;
 	goto st0;
 st149:
 	if ( ++p == pe )
 		goto _test_eof149;
 case 149:
-	if ( (*p) == 101 )
+	if ( (*p) == 109 )
 		goto st150;
 	goto st0;
 st150:
 	if ( ++p == pe )
 		goto _test_eof150;
 case 150:
-	if ( (*p) == 114 )
-		goto tr170;
+	if ( (*p) == 98 )
+		goto st151;
 	goto st0;
+st151:
+	if ( ++p == pe )
+		goto _test_eof151;
 case 151:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr171;
+	if ( (*p) == 101 )
+		goto st152;
 	goto st0;
-tr171:
-#line 16 "src/panda/date/strptime.rl"
-	{
-        acc *= 10;
-        acc += (*p) - '0';
-    }
-	goto st152;
 st152:
 	if ( ++p == pe )
 		goto _test_eof152;
 case 152:
-#line 2003 "src/panda/date/strptime.cc"
-	if ( 48 <= (*p) && (*p) <= 57 )
+	if ( (*p) == 114 )
 		goto tr172;
 	goto st0;
-tr172:
-#line 16 "src/panda/date/strptime.rl"
-	{
-        acc *= 10;
-        acc += (*p) - '0';
-    }
-	goto st153;
-st153:
-	if ( ++p == pe )
-		goto _test_eof153;
 case 153:
-#line 2018 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr173;
 	goto st0;
@@ -2029,7 +2036,7 @@ st154:
 	if ( ++p == pe )
 		goto _test_eof154;
 case 154:
-#line 2033 "src/panda/date/strptime.cc"
+#line 2040 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr174;
 	goto st0;
@@ -2039,18 +2046,12 @@ tr174:
         acc *= 10;
         acc += (*p) - '0';
     }
-#line 22 "src/panda/date/strptime.rl"
-	{ NSAVE(_date.year); }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 195; goto _out;} }
-	goto st195;
-st195:
+	goto st155;
+st155:
 	if ( ++p == pe )
-		goto _test_eof195;
-case 195:
-#line 2052 "src/panda/date/strptime.cc"
-	goto st0;
+		goto _test_eof155;
 case 155:
+#line 2055 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr175;
 	goto st0;
@@ -2065,7 +2066,7 @@ st156:
 	if ( ++p == pe )
 		goto _test_eof156;
 case 156:
-#line 2069 "src/panda/date/strptime.cc"
+#line 2070 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr176;
 	goto st0;
@@ -2075,20 +2076,16 @@ tr176:
         acc *= 10;
         acc += (*p) - '0';
     }
-#line 33 "src/panda/date/strptime.rl"
-	{
-        if (acc <= 50) _date.year = 2000 + acc;
-        else           _date.year = 1900 + acc;
-        acc = 0;
-    }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 196; goto _out;} }
-	goto st196;
-st196:
+#line 22 "src/panda/date/strptime.rl"
+	{ NSAVE(_date.year); }
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 198; goto _out;} }
+	goto st198;
+st198:
 	if ( ++p == pe )
-		goto _test_eof196;
-case 196:
-#line 2092 "src/panda/date/strptime.cc"
+		goto _test_eof198;
+case 198:
+#line 2089 "src/panda/date/strptime.cc"
 	goto st0;
 case 157:
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -2105,7 +2102,7 @@ st158:
 	if ( ++p == pe )
 		goto _test_eof158;
 case 158:
-#line 2109 "src/panda/date/strptime.cc"
+#line 2106 "src/panda/date/strptime.cc"
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr178;
 	goto st0;
@@ -2115,47 +2112,87 @@ tr178:
         acc *= 10;
         acc += (*p) - '0';
     }
-#line 21 "src/panda/date/strptime.rl"
-	{ _date.year += acc * 100; acc = 0; }
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 197; goto _out;} }
-	goto st197;
-st197:
+#line 34 "src/panda/date/strptime.rl"
+	{
+        if (acc <= 50) _date.year = 2000 + acc;
+        else           _date.year = 1900 + acc;
+        acc = 0;
+    }
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 199; goto _out;} }
+	goto st199;
+st199:
 	if ( ++p == pe )
-		goto _test_eof197;
-case 197:
-#line 2128 "src/panda/date/strptime.cc"
+		goto _test_eof199;
+case 199:
+#line 2129 "src/panda/date/strptime.cc"
 	goto st0;
 case 159:
-	if ( (*p) == 37 )
+	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr179;
 	goto st0;
 tr179:
-#line 31 "src/panda/date/strptime.rl"
-	{ {p++; cs = 198; goto _out;} }
-	goto st198;
-st198:
+#line 16 "src/panda/date/strptime.rl"
+	{
+        acc *= 10;
+        acc += (*p) - '0';
+    }
+	goto st160;
+st160:
 	if ( ++p == pe )
-		goto _test_eof198;
-case 198:
-#line 2142 "src/panda/date/strptime.cc"
+		goto _test_eof160;
+case 160:
+#line 2146 "src/panda/date/strptime.cc"
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr180;
+	goto st0;
+tr180:
+#line 16 "src/panda/date/strptime.rl"
+	{
+        acc *= 10;
+        acc += (*p) - '0';
+    }
+#line 21 "src/panda/date/strptime.rl"
+	{ _date.year += acc * 100; acc = 0; }
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 200; goto _out;} }
+	goto st200;
+st200:
+	if ( ++p == pe )
+		goto _test_eof200;
+case 200:
+#line 2165 "src/panda/date/strptime.cc"
+	goto st0;
+case 161:
+	if ( (*p) == 37 )
+		goto tr181;
+	goto st0;
+tr181:
+#line 32 "src/panda/date/strptime.rl"
+	{ {p++; cs = 201; goto _out;} }
+	goto st201;
+st201:
+	if ( ++p == pe )
+		goto _test_eof201;
+case 201:
+#line 2179 "src/panda/date/strptime.cc"
 	goto st0;
 	}
-	_test_eof160: cs = 160; goto _test_eof; 
+	_test_eof162: cs = 162; goto _test_eof; 
 	_test_eof2: cs = 2; goto _test_eof; 
-	_test_eof161: cs = 161; goto _test_eof; 
+	_test_eof163: cs = 163; goto _test_eof; 
 	_test_eof3: cs = 3; goto _test_eof; 
 	_test_eof5: cs = 5; goto _test_eof; 
-	_test_eof162: cs = 162; goto _test_eof; 
-	_test_eof7: cs = 7; goto _test_eof; 
-	_test_eof163: cs = 163; goto _test_eof; 
-	_test_eof9: cs = 9; goto _test_eof; 
 	_test_eof164: cs = 164; goto _test_eof; 
+	_test_eof7: cs = 7; goto _test_eof; 
+	_test_eof165: cs = 165; goto _test_eof; 
+	_test_eof9: cs = 9; goto _test_eof; 
+	_test_eof166: cs = 166; goto _test_eof; 
 	_test_eof11: cs = 11; goto _test_eof; 
 	_test_eof12: cs = 12; goto _test_eof; 
 	_test_eof13: cs = 13; goto _test_eof; 
 	_test_eof14: cs = 14; goto _test_eof; 
-	_test_eof165: cs = 165; goto _test_eof; 
+	_test_eof167: cs = 167; goto _test_eof; 
 	_test_eof16: cs = 16; goto _test_eof; 
 	_test_eof17: cs = 17; goto _test_eof; 
 	_test_eof18: cs = 18; goto _test_eof; 
@@ -2163,7 +2200,7 @@ case 198:
 	_test_eof20: cs = 20; goto _test_eof; 
 	_test_eof21: cs = 21; goto _test_eof; 
 	_test_eof22: cs = 22; goto _test_eof; 
-	_test_eof166: cs = 166; goto _test_eof; 
+	_test_eof168: cs = 168; goto _test_eof; 
 	_test_eof24: cs = 24; goto _test_eof; 
 	_test_eof25: cs = 25; goto _test_eof; 
 	_test_eof26: cs = 26; goto _test_eof; 
@@ -2174,7 +2211,7 @@ case 198:
 	_test_eof31: cs = 31; goto _test_eof; 
 	_test_eof32: cs = 32; goto _test_eof; 
 	_test_eof33: cs = 33; goto _test_eof; 
-	_test_eof167: cs = 167; goto _test_eof; 
+	_test_eof169: cs = 169; goto _test_eof; 
 	_test_eof34: cs = 34; goto _test_eof; 
 	_test_eof36: cs = 36; goto _test_eof; 
 	_test_eof37: cs = 37; goto _test_eof; 
@@ -2183,7 +2220,7 @@ case 198:
 	_test_eof40: cs = 40; goto _test_eof; 
 	_test_eof41: cs = 41; goto _test_eof; 
 	_test_eof42: cs = 42; goto _test_eof; 
-	_test_eof168: cs = 168; goto _test_eof; 
+	_test_eof170: cs = 170; goto _test_eof; 
 	_test_eof44: cs = 44; goto _test_eof; 
 	_test_eof45: cs = 45; goto _test_eof; 
 	_test_eof46: cs = 46; goto _test_eof; 
@@ -2200,142 +2237,141 @@ case 198:
 	_test_eof57: cs = 57; goto _test_eof; 
 	_test_eof58: cs = 58; goto _test_eof; 
 	_test_eof59: cs = 59; goto _test_eof; 
-	_test_eof169: cs = 169; goto _test_eof; 
+	_test_eof171: cs = 171; goto _test_eof; 
 	_test_eof61: cs = 61; goto _test_eof; 
-	_test_eof170: cs = 170; goto _test_eof; 
+	_test_eof172: cs = 172; goto _test_eof; 
 	_test_eof63: cs = 63; goto _test_eof; 
 	_test_eof64: cs = 64; goto _test_eof; 
-	_test_eof171: cs = 171; goto _test_eof; 
-	_test_eof66: cs = 66; goto _test_eof; 
-	_test_eof172: cs = 172; goto _test_eof; 
 	_test_eof173: cs = 173; goto _test_eof; 
+	_test_eof66: cs = 66; goto _test_eof; 
+	_test_eof174: cs = 174; goto _test_eof; 
+	_test_eof175: cs = 175; goto _test_eof; 
 	_test_eof69: cs = 69; goto _test_eof; 
 	_test_eof70: cs = 70; goto _test_eof; 
-	_test_eof174: cs = 174; goto _test_eof; 
+	_test_eof176: cs = 176; goto _test_eof; 
 	_test_eof71: cs = 71; goto _test_eof; 
 	_test_eof72: cs = 72; goto _test_eof; 
-	_test_eof175: cs = 175; goto _test_eof; 
+	_test_eof177: cs = 177; goto _test_eof; 
 	_test_eof73: cs = 73; goto _test_eof; 
 	_test_eof74: cs = 74; goto _test_eof; 
-	_test_eof176: cs = 176; goto _test_eof; 
+	_test_eof178: cs = 178; goto _test_eof; 
 	_test_eof75: cs = 75; goto _test_eof; 
 	_test_eof76: cs = 76; goto _test_eof; 
 	_test_eof77: cs = 77; goto _test_eof; 
 	_test_eof78: cs = 78; goto _test_eof; 
-	_test_eof177: cs = 177; goto _test_eof; 
+	_test_eof179: cs = 179; goto _test_eof; 
 	_test_eof79: cs = 79; goto _test_eof; 
 	_test_eof80: cs = 80; goto _test_eof; 
 	_test_eof81: cs = 81; goto _test_eof; 
 	_test_eof82: cs = 82; goto _test_eof; 
 	_test_eof83: cs = 83; goto _test_eof; 
-	_test_eof178: cs = 178; goto _test_eof; 
+	_test_eof180: cs = 180; goto _test_eof; 
 	_test_eof84: cs = 84; goto _test_eof; 
 	_test_eof85: cs = 85; goto _test_eof; 
 	_test_eof86: cs = 86; goto _test_eof; 
 	_test_eof87: cs = 87; goto _test_eof; 
-	_test_eof179: cs = 179; goto _test_eof; 
+	_test_eof181: cs = 181; goto _test_eof; 
 	_test_eof88: cs = 88; goto _test_eof; 
 	_test_eof89: cs = 89; goto _test_eof; 
 	_test_eof90: cs = 90; goto _test_eof; 
 	_test_eof91: cs = 91; goto _test_eof; 
 	_test_eof92: cs = 92; goto _test_eof; 
-	_test_eof180: cs = 180; goto _test_eof; 
+	_test_eof182: cs = 182; goto _test_eof; 
 	_test_eof93: cs = 93; goto _test_eof; 
 	_test_eof94: cs = 94; goto _test_eof; 
 	_test_eof95: cs = 95; goto _test_eof; 
 	_test_eof96: cs = 96; goto _test_eof; 
 	_test_eof97: cs = 97; goto _test_eof; 
-	_test_eof181: cs = 181; goto _test_eof; 
+	_test_eof183: cs = 183; goto _test_eof; 
 	_test_eof98: cs = 98; goto _test_eof; 
 	_test_eof99: cs = 99; goto _test_eof; 
 	_test_eof100: cs = 100; goto _test_eof; 
 	_test_eof101: cs = 101; goto _test_eof; 
 	_test_eof102: cs = 102; goto _test_eof; 
 	_test_eof104: cs = 104; goto _test_eof; 
-	_test_eof182: cs = 182; goto _test_eof; 
-	_test_eof106: cs = 106; goto _test_eof; 
-	_test_eof107: cs = 107; goto _test_eof; 
-	_test_eof183: cs = 183; goto _test_eof; 
-	_test_eof108: cs = 108; goto _test_eof; 
 	_test_eof184: cs = 184; goto _test_eof; 
-	_test_eof109: cs = 109; goto _test_eof; 
+	_test_eof106: cs = 106; goto _test_eof; 
 	_test_eof185: cs = 185; goto _test_eof; 
+	_test_eof108: cs = 108; goto _test_eof; 
+	_test_eof109: cs = 109; goto _test_eof; 
+	_test_eof186: cs = 186; goto _test_eof; 
 	_test_eof110: cs = 110; goto _test_eof; 
+	_test_eof187: cs = 187; goto _test_eof; 
 	_test_eof111: cs = 111; goto _test_eof; 
+	_test_eof188: cs = 188; goto _test_eof; 
 	_test_eof112: cs = 112; goto _test_eof; 
 	_test_eof113: cs = 113; goto _test_eof; 
-	_test_eof186: cs = 186; goto _test_eof; 
 	_test_eof114: cs = 114; goto _test_eof; 
 	_test_eof115: cs = 115; goto _test_eof; 
+	_test_eof189: cs = 189; goto _test_eof; 
 	_test_eof116: cs = 116; goto _test_eof; 
 	_test_eof117: cs = 117; goto _test_eof; 
 	_test_eof118: cs = 118; goto _test_eof; 
 	_test_eof119: cs = 119; goto _test_eof; 
-	_test_eof187: cs = 187; goto _test_eof; 
 	_test_eof120: cs = 120; goto _test_eof; 
 	_test_eof121: cs = 121; goto _test_eof; 
+	_test_eof190: cs = 190; goto _test_eof; 
 	_test_eof122: cs = 122; goto _test_eof; 
 	_test_eof123: cs = 123; goto _test_eof; 
 	_test_eof124: cs = 124; goto _test_eof; 
 	_test_eof125: cs = 125; goto _test_eof; 
-	_test_eof188: cs = 188; goto _test_eof; 
 	_test_eof126: cs = 126; goto _test_eof; 
 	_test_eof127: cs = 127; goto _test_eof; 
+	_test_eof191: cs = 191; goto _test_eof; 
 	_test_eof128: cs = 128; goto _test_eof; 
 	_test_eof129: cs = 129; goto _test_eof; 
-	_test_eof189: cs = 189; goto _test_eof; 
-	_test_eof190: cs = 190; goto _test_eof; 
 	_test_eof130: cs = 130; goto _test_eof; 
 	_test_eof131: cs = 131; goto _test_eof; 
-	_test_eof191: cs = 191; goto _test_eof; 
+	_test_eof192: cs = 192; goto _test_eof; 
+	_test_eof193: cs = 193; goto _test_eof; 
 	_test_eof132: cs = 132; goto _test_eof; 
 	_test_eof133: cs = 133; goto _test_eof; 
+	_test_eof194: cs = 194; goto _test_eof; 
 	_test_eof134: cs = 134; goto _test_eof; 
-	_test_eof192: cs = 192; goto _test_eof; 
 	_test_eof135: cs = 135; goto _test_eof; 
 	_test_eof136: cs = 136; goto _test_eof; 
+	_test_eof195: cs = 195; goto _test_eof; 
 	_test_eof137: cs = 137; goto _test_eof; 
 	_test_eof138: cs = 138; goto _test_eof; 
 	_test_eof139: cs = 139; goto _test_eof; 
 	_test_eof140: cs = 140; goto _test_eof; 
-	_test_eof193: cs = 193; goto _test_eof; 
 	_test_eof141: cs = 141; goto _test_eof; 
 	_test_eof142: cs = 142; goto _test_eof; 
+	_test_eof196: cs = 196; goto _test_eof; 
 	_test_eof143: cs = 143; goto _test_eof; 
 	_test_eof144: cs = 144; goto _test_eof; 
 	_test_eof145: cs = 145; goto _test_eof; 
-	_test_eof194: cs = 194; goto _test_eof; 
 	_test_eof146: cs = 146; goto _test_eof; 
 	_test_eof147: cs = 147; goto _test_eof; 
+	_test_eof197: cs = 197; goto _test_eof; 
 	_test_eof148: cs = 148; goto _test_eof; 
 	_test_eof149: cs = 149; goto _test_eof; 
 	_test_eof150: cs = 150; goto _test_eof; 
+	_test_eof151: cs = 151; goto _test_eof; 
 	_test_eof152: cs = 152; goto _test_eof; 
-	_test_eof153: cs = 153; goto _test_eof; 
 	_test_eof154: cs = 154; goto _test_eof; 
-	_test_eof195: cs = 195; goto _test_eof; 
+	_test_eof155: cs = 155; goto _test_eof; 
 	_test_eof156: cs = 156; goto _test_eof; 
-	_test_eof196: cs = 196; goto _test_eof; 
-	_test_eof158: cs = 158; goto _test_eof; 
-	_test_eof197: cs = 197; goto _test_eof; 
 	_test_eof198: cs = 198; goto _test_eof; 
+	_test_eof158: cs = 158; goto _test_eof; 
+	_test_eof199: cs = 199; goto _test_eof; 
+	_test_eof160: cs = 160; goto _test_eof; 
+	_test_eof200: cs = 200; goto _test_eof; 
+	_test_eof201: cs = 201; goto _test_eof; 
 
 	_test_eof: {}
 	if ( p == eof )
 	{
 	switch ( cs ) {
-	case 160: 
-	case 174: 
-	case 175: 
+	case 162: 
 	case 176: 
 	case 177: 
 	case 178: 
 	case 179: 
 	case 180: 
 	case 181: 
+	case 182: 
 	case 183: 
-	case 184: 
-	case 185: 
 	case 186: 
 	case 187: 
 	case 188: 
@@ -2345,17 +2381,20 @@ case 198:
 	case 192: 
 	case 193: 
 	case 194: 
-#line 31 "src/panda/date/strptime.rl"
+	case 195: 
+	case 196: 
+	case 197: 
+#line 32 "src/panda/date/strptime.rl"
 	{ {p++; cs = 0; goto _out;} }
 	break;
-#line 2352 "src/panda/date/strptime.cc"
+#line 2391 "src/panda/date/strptime.cc"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 96 "src/panda/date/strptime.rl"
+#line 98 "src/panda/date/strptime.rl"
 
 
     // printf("_parse_str %s -> cs=%d, consumed=%d\n", pb, cs, p - pb);
@@ -2363,11 +2402,11 @@ case 198:
 }
 
 
-#line 130 "src/panda/date/strptime.rl"
+#line 134 "src/panda/date/strptime.rl"
 
 
 
-#line 2371 "src/panda/date/strptime.cc"
+#line 2410 "src/panda/date/strptime.cc"
 static const int meta_parser_start = 1;
 static const int meta_parser_first_final = 3;
 static const int meta_parser_error = 0;
@@ -2375,16 +2414,16 @@ static const int meta_parser_error = 0;
 static const int meta_parser_en_m_main = 1;
 
 
-#line 133 "src/panda/date/strptime.rl"
+#line 137 "src/panda/date/strptime.rl"
 
-static inline MetaConsume _parse_meta(const char* p, const char* pe)  {
+static inline MetaConsume _parse_meta(const char* p, const char* pe, unsigned& beginning_weekday_offset)  {
     const char* pb     = p;
     const char* eof    = pe;
     int         cs     = meta_parser_en_m_main;
     int         p_cs   = 0;
 
     
-#line 2388 "src/panda/date/strptime.cc"
+#line 2427 "src/panda/date/strptime.cc"
 	{
 	if ( p == pe )
 		goto _test_eof;
@@ -2401,14 +2440,14 @@ st0:
 cs = 0;
 	goto _out;
 tr0:
-#line 124 "src/panda/date/strptime.rl"
+#line 128 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_space; {p++; cs = 3; goto _out;} }
 	goto st3;
 st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 2412 "src/panda/date/strptime.cc"
+#line 2451 "src/panda/date/strptime.cc"
 	switch( (*p) ) {
 		case 9: goto tr0;
 		case 32: goto tr0;
@@ -2428,111 +2467,121 @@ case 2:
 		case 82: goto tr10;
 		case 83: goto tr11;
 		case 84: goto tr12;
+		case 85: goto tr13;
+		case 87: goto tr14;
 		case 88: goto tr12;
-		case 89: goto tr13;
+		case 89: goto tr15;
 		case 97: goto tr4;
 		case 98: goto tr5;
-		case 99: goto tr14;
-		case 100: goto tr15;
+		case 99: goto tr16;
+		case 100: goto tr17;
 		case 104: goto tr5;
-		case 106: goto tr16;
-		case 109: goto tr17;
-		case 110: goto tr18;
-		case 112: goto tr19;
-		case 114: goto tr20;
-		case 116: goto tr18;
-		case 119: goto tr21;
+		case 106: goto tr18;
+		case 109: goto tr19;
+		case 110: goto tr20;
+		case 112: goto tr21;
+		case 114: goto tr22;
+		case 116: goto tr20;
+		case 119: goto tr23;
 		case 120: goto tr7;
-		case 121: goto tr22;
+		case 121: goto tr24;
 	}
 	if ( 72 <= (*p) && (*p) <= 73 )
 		goto tr8;
 	goto st0;
 tr3:
-#line 122 "src/panda/date/strptime.rl"
+#line 126 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_perc;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr4:
-#line 111 "src/panda/date/strptime.rl"
+#line 113 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_wname; {p++; cs = 4; goto _out;} }
 	goto st4;
 tr5:
-#line 114 "src/panda/date/strptime.rl"
+#line 118 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_mname;     {p++; cs = 4; goto _out;} }
 	goto st4;
 tr6:
-#line 107 "src/panda/date/strptime.rl"
+#line 109 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_cent;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr7:
-#line 121 "src/panda/date/strptime.rl"
+#line 125 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_mdy;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr8:
-#line 112 "src/panda/date/strptime.rl"
+#line 116 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_hour;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr9:
-#line 115 "src/panda/date/strptime.rl"
+#line 119 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_min;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr10:
-#line 117 "src/panda/date/strptime.rl"
+#line 121 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_hour_min;  {p++; cs = 4; goto _out;} }
 	goto st4;
 tr11:
-#line 116 "src/panda/date/strptime.rl"
+#line 120 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_sec;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr12:
-#line 120 "src/panda/date/strptime.rl"
+#line 124 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_hms;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr13:
-#line 106 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_year;      {p++; cs = 4; goto _out;} }
+#line 115 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_wnum; beginning_weekday_offset = 1; {p++; cs = 4; goto _out;} }
 	goto st4;
 tr14:
-#line 118 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_mdyhms;    {p++; cs = 4; goto _out;} }
+#line 114 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_wnum; {p++; cs = 4; goto _out;} }
 	goto st4;
 tr15:
 #line 108 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_day;       {p++; cs = 4; goto _out;} }
+	{ p_cs = parser_en_p_year;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr16:
-#line 109 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_day3;      {p++; cs = 4; goto _out;} }
+#line 122 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_mdyhms;    {p++; cs = 4; goto _out;} }
 	goto st4;
 tr17:
-#line 113 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_month;     {p++; cs = 4; goto _out;} }
+#line 110 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_day;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr18:
-#line 123 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_space;  {p++; cs = 4; goto _out;} }
+#line 111 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_day3;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr19:
-#line 105 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_ampm;      {p++; cs = 4; goto _out;} }
+#line 117 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_month;     {p++; cs = 4; goto _out;} }
 	goto st4;
 tr20:
-#line 119 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_hmsampm;       {p++; cs = 4; goto _out;} }
+#line 127 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_space;  {p++; cs = 4; goto _out;} }
 	goto st4;
 tr21:
-#line 110 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_wday;      {p++; cs = 4; goto _out;} }
+#line 107 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_ampm;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr22:
-#line 104 "src/panda/date/strptime.rl"
+#line 123 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_hmsampm;       {p++; cs = 4; goto _out;} }
+	goto st4;
+tr23:
+#line 112 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_wday;      {p++; cs = 4; goto _out;} }
+	goto st4;
+tr24:
+#line 106 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_yr;        {p++; cs = 4; goto _out;} }
 	goto st4;
 st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 2536 "src/panda/date/strptime.cc"
+#line 2585 "src/panda/date/strptime.cc"
 	goto st0;
 	}
 	_test_eof3: cs = 3; goto _test_eof; 
@@ -2543,7 +2592,7 @@ case 4:
 	_out: {}
 	}
 
-#line 141 "src/panda/date/strptime.rl"
+#line 145 "src/panda/date/strptime.rl"
 
     auto consumed = p - pb;
     // printf("_parse_meta '%s' p_cs=%d, c=%d, cs=%d\n", pb, p_cs, consumed, cs);
@@ -2556,6 +2605,9 @@ void Date::strptime (string_view str, string_view format) {
     _error = errc::ok;
     _mksec = 0;
 
+    unsigned week = 0;
+    unsigned beginning_weekday_offset = 0;
+
     const char* m_p = format.data();
     const char* m_e = m_p + format.length();
     const char* s_p = str.data();
@@ -2563,9 +2615,9 @@ void Date::strptime (string_view str, string_view format) {
 
     while((m_p != m_e) && (s_p != s_e)) {
         // printf("cycle, meta='%s', str='%s'\n", m_p, s_p);
-        auto meta_result = _parse_meta(m_p, m_e);
+        auto meta_result = _parse_meta(m_p, m_e, beginning_weekday_offset);
         if (meta_result.cs) {
-            int consumed = _parse_str(meta_result.cs, s_p, s_e, _date);
+            int consumed = _parse_str(meta_result.cs, s_p, s_e, week, _date);
             if (consumed >= 0) {
                 s_p += consumed;
             } else {
@@ -2584,6 +2636,11 @@ void Date::strptime (string_view str, string_view format) {
         }
         m_p += meta_result.consumed;
     }
+
+    if (m_p == m_e && s_p == s_e) {
+        _post_parse_week(week, beginning_weekday_offset);
+    }
+
 }
 
 }}

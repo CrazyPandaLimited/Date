@@ -38,4 +38,6 @@ TEST("parse") {
     test("%A week name", "Tue-06-99", "%A-%m-%y" ,"1999-06-01");
     //test("%A week name/2", "Wed-06-99", "%A-%m-%y" ,"1999-06-02");
     test("%b month name", "02-March-99", "%d-%b-%y" ,"1999-03-02");
+    test("%W week number", "2014-W02-5", "%Y-W%W-%w" ,"2014-01-10");
+    //test("%U shifted week number", "2014-W02-4", "%Y-W%W-%w" ,"2014-01-10");
 }

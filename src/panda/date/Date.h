@@ -317,6 +317,8 @@ private:
     void _zone_set (const TimezoneSP& zone) {
         if (zone) _zone = zone;
     }
+
+    void _post_parse_week(unsigned week, unsigned offset);
 };
 
 std::ostream& operator<< (std::ostream&, const Date&);
