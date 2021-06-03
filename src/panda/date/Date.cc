@@ -209,17 +209,11 @@ void Date::_post_parse_week(unsigned week, unsigned offset) {
         auto days_since_christ = panda::time::christ_days(_date.year);
         int32_t beginning_weekday = days_since_christ % 7;
         if (!_date.wday) _date.wday = 1;
-        int shift = (_date.wday + offset - 1);
         if (week == 1) {
-            int mday = WEEK_1_OFFSETS[beginning_weekday] + shift;
-            if (mday <= 0) { // was no such weekday that year
-                _error = errc::out_of_range;
-                return;
-            }
-            _date.mday = mday;
+            _date.mday = WEEK_1_OFFSETS[beginning_weekday] + (_date.wday - 1);
         }
         else {
-            _date.mday = WEEK_2_OFFSETS[beginning_weekday] + shift + 7 * (week - 2);
+            _date.mday = WEEK_2_OFFSETS[beginning_weekday] + (_date.wday - 1) + 7 * (week - 2);
         }
     }
     else if (_date.wday) { // check wday number if included in date
