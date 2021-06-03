@@ -5999,12 +5999,7 @@ case 376:
         int32_t beginning_weekday = days_since_christ % 7;
         if (!_date.wday) _date.wday = 1;
         if (week == 1) {
-            int mday = WEEK_1_OFFSETS[beginning_weekday] + (_date.wday - 1);
-            if (mday <= 0) { // was no such weekday that year
-                _error = errc::out_of_range;
-                return;
-            }
-            _date.mday = mday;
+            _date.mday = WEEK_1_OFFSETS[beginning_weekday] + (_date.wday - 1);
         }
         else {
             _date.mday = WEEK_2_OFFSETS[beginning_weekday] + (_date.wday - 1) + 7 * (week - 2);
