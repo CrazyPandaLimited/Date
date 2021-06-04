@@ -318,7 +318,7 @@ private:
         if (zone) _zone = zone;
     }
 
-    void _post_parse_week(unsigned week, unsigned offset);
+    void _post_parse_week(unsigned week);
 };
 
 std::ostream& operator<< (std::ostream&, const Date&);

@@ -203,7 +203,7 @@ Date& Date::operator-= (const DateRel& operand) {
 static constexpr const int32_t WEEK_1_OFFSETS[] = {0, -1, -2, -3, 4, 3, 2};
 static constexpr const int32_t WEEK_2_OFFSETS[] = {8, 7, 6, 5, 9, 10, 9};
 
-void Date::_post_parse_week(unsigned week, unsigned offset) {
+void Date::_post_parse_week(unsigned week) {
     // convert from week to mday for YYYY-Wnn[-nn] format
     if (week) {
         auto days_since_christ = panda::time::christ_days(_date.year);

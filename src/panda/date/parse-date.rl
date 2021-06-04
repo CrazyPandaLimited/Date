@@ -210,7 +210,7 @@ void Date::parse (string_view str, int allowed_formats) {
     }
     
     if (tzi.len) _zone = panda::time::tzget(string_view(tzi.rule, tzi.len));
-    _post_parse_week(week, 0);
+    _post_parse_week(week);
 }
 
 }}
