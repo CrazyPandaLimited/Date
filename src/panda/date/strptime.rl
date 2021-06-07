@@ -3,6 +3,8 @@
 
 #define NSAVE(dest) { dest = acc; acc = 0; }
 
+enum class WeekInterpretation { none = -2, iso = -1, monday = 0, sunday = 6 };
+
 namespace panda { namespace date {
 
 struct MetaConsume {
@@ -76,7 +78,7 @@ struct MetaConsume {
     p_day_void := P_day_nn | (" " digit $digit) @day @done;
     p_wday     := digit{1} $digit @wday @done;
     p_wname    := P_wname %done;
-    p_wnum_iso := nn >{ week = 0;} @week @done;
+    p_wnum     := nn >{ week = 0;} @week @done;
     p_month    := nn @month @done;
     p_mname    := P_mname %done;
     p_year     := digit{4} $digit @year @done;
@@ -111,8 +113,9 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
     m_day3      = '%j' @{ p_cs = parser_en_p_day3;      fbreak; };
     m_wday      = '%w' @{ p_cs = parser_en_p_wday;      fbreak; };
     m_wname     = ('%a' | '%A') @{ p_cs = parser_en_p_wname; fbreak; };
-    m_wnum_iso  = '%V' @{ p_cs = parser_en_p_wnum_iso; fbreak; };
-    #m_wnum_m    = '%U' @{ p_cs = parser_en_p_wnum; beginning_weekday_offset = 1; fbreak; };
+    m_wnum_iso  = '%V' @{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::iso;    fbreak; };
+    m_wnum_mon  = '%W' @{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::monday; fbreak; };
+    m_wnum_sun  = '%U' @{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::sunday; fbreak; };
     m_hour      = ('%H' | '%I') @{ p_cs = parser_en_p_hour;      fbreak; };
     m_month     = '%m' @{ p_cs = parser_en_p_month;     fbreak; };
     m_mname     = ('%b' | '%B' | '%h')  @{ p_cs = parser_en_p_mname;     fbreak; };
@@ -127,7 +130,8 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
     m_space_enc = ('%t' | '%n') @{ p_cs = parser_en_p_space;  fbreak; };
     m_space     = (' ' | '\t')+  @{ p_cs = parser_en_p_space; fbreak; };
 
-    m_main := m_space | m_space_enc | m_perc | m_yr | m_ampm | m_cent | m_day3 | m_mname | m_wnum_iso |
+    m_main := m_space | m_space_enc | m_perc | m_yr | m_ampm | m_cent | m_day3 | m_mname |
+              m_wnum_iso | m_wnum_mon | m_wnum_sun |
               m_year | m_month | m_day | m_wday | m_wname | m_hour | m_min | m_sec |
               m_hour_min | m_hms | m_mdy | m_mdyhms | m_hmsampm
            ;
@@ -135,7 +139,7 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
 
 %% write data;
 
-static inline MetaConsume _parse_meta(const char* p, const char* pe, unsigned& beginning_weekday_offset)  {
+static inline MetaConsume _parse_meta(const char* p, const char* pe, WeekInterpretation& week_interptetation)  {
     const char* pb     = p;
     const char* eof    = pe;
     int         cs     = meta_parser_en_m_main;
@@ -155,7 +159,7 @@ void Date::strptime (string_view str, string_view format) {
     _mksec = 0;
 
     int week = -1;
-    unsigned beginning_weekday_offset = 0;
+    WeekInterpretation week_interptetation = WeekInterpretation::none;
 
     const char* m_p = format.data();
     const char* m_e = m_p + format.length();
@@ -164,7 +168,7 @@ void Date::strptime (string_view str, string_view format) {
 
     while((m_p != m_e) && (s_p != s_e)) {
         // printf("cycle, meta='%s', str='%s'\n", m_p, s_p);
-        auto meta_result = _parse_meta(m_p, m_e, beginning_weekday_offset);
+        auto meta_result = _parse_meta(m_p, m_e, week_interptetation);
         if (meta_result.cs) {
             int consumed = _parse_str(meta_result.cs, s_p, s_e, week, _date);
             if (consumed >= 0) {
@@ -186,11 +190,24 @@ void Date::strptime (string_view str, string_view format) {
         m_p += meta_result.consumed;
     }
 
-    if (m_p == m_e && s_p == s_e && week >= 0) {
-        ++week;
-        _post_parse_week((unsigned)week);
-    }
+    if (!(m_p == m_e && s_p == s_e)) { return; }
+    switch (week_interptetation) {
+        case WeekInterpretation::none: break;
+        case WeekInterpretation::iso: _post_parse_week((unsigned)week); break;
+        case WeekInterpretation::monday: ; /* fallthrough */
+        case WeekInterpretation::sunday:
+            //static constexpr const int32_t WEEK_DELTA[] = {-6, 0, -1, -2, -3, -4, -5};
+            static constexpr const int32_t WEEK_DELTA[] = {6, 0, 1, 2, 3, 4, 5};
 
+            auto days_since_christ = panda::time::christ_days(_date.year);
+            int32_t beginning_weekday = days_since_christ % 7;
+            if (!_date.wday) _date.wday = 1;
+            //auto delta = WEEK_DELTA[beginning_weekday];
+            auto delta = (((beginning_weekday - 1) + 7 + (int)week_interptetation) % 7);
+            printf("y = %d, wday = %d, delta = %d, beg = %d\n", _date.year, _date.wday, delta, beginning_weekday);
+            //if (delta < 0) { delta = -(7 - delta); };
+            _date.mday = week * 7  + (_date.wday - 1) - delta;
+    }
 }
 
 }}
