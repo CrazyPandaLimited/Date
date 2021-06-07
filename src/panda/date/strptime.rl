@@ -3,7 +3,7 @@
 
 #define NSAVE(dest) { dest = acc; acc = 0; }
 
-enum class WeekInterpretation { none = -2, iso = -1, monday = 0, sunday = 6 };
+enum class WeekInterpretation { none = 2, iso = 1, monday = 0, sunday = -7 };
 
 namespace panda { namespace date {
 
@@ -196,16 +196,17 @@ void Date::strptime (string_view str, string_view format) {
         case WeekInterpretation::iso: _post_parse_week((unsigned)week); break;
         case WeekInterpretation::monday: ; /* fallthrough */
         case WeekInterpretation::sunday:
-            //static constexpr const int32_t WEEK_DELTA[] = {-6, 0, -1, -2, -3, -4, -5};
-            static constexpr const int32_t WEEK_DELTA[] = {6, 0, 1, 2, 3, 4, 5};
-
+        if (!_date.wday) _date.wday = 1;
             auto days_since_christ = panda::time::christ_days(_date.year);
             int32_t beginning_weekday = days_since_christ % 7;
-            if (!_date.wday) _date.wday = 1;
+
+            //static constexpr const int32_t WEEK_DELTA[] = {6, 0, 1, 2, 3, 4, 5};
+            //static constexpr const int32_t WEEK_DELTA[] = {-1, 0, 1, 2, 3, 4, 5};
             //auto delta = WEEK_DELTA[beginning_weekday];
-            auto delta = (((beginning_weekday - 1) + 7 + (int)week_interptetation) % 7);
-            printf("y = %d, wday = %d, delta = %d, beg = %d\n", _date.year, _date.wday, delta, beginning_weekday);
-            //if (delta < 0) { delta = -(7 - delta); };
+            if (!beginning_weekday) beginning_weekday = (int)week_interptetation;   // for %U
+            auto delta = ((beginning_weekday - 1) + 7) % 7;
+
+            //printf("y = %d, wday = %d, delta = %d, beg = %d\n", _date.year, _date.wday, delta, beginning_weekday);
             _date.mday = week * 7  + (_date.wday - 1) - delta;
     }
 }

@@ -37,14 +37,13 @@ TEST("parse") {
     test("%w week day", "2-06-99", "%w-%m-%y" ,"1999-06-01");
     test("%A week name", "Tue-06-99", "%A-%m-%y" ,"1999-06-01");
     //test("%A week name/2", "Wed-06-99", "%A-%m-%y" ,"1999-06-02");
-    //test("%b month name", "02-March-99", "%d-%b-%y" ,"1999-03-02");
+    test("%b month name", "02-March-99", "%d-%b-%y" ,"1999-03-02");
     test("%V ISO8601 week number", "2017-W01-5", "%Y-W%V-%w" ,"2017-01-06");
 
     SECTION("%W week number, Monday first day of the first week") {
         test("sunday",   "2017-W01-1",  "%Y-W%W-%w", "2017-01-02");
         test("monday",    "2018-W01-1", "%Y-W%W-%w", "2018-01-01");
         test("tuesday",   "2019-W01-1", "%Y-W%W-%w", "2019-01-07");
-        /*
         test("wednesday", "2014-W01-1", "%Y-W%W-%w", "2014-01-06");
         test("thursday",  "2015-W01-1", "%Y-W%W-%w", "2015-01-05");
         test("friday",    "2016-W01-1", "%Y-W%W-%w", "2016-01-04");
@@ -53,25 +52,20 @@ TEST("parse") {
         test("sunday+2",  "2017-W01-3", "%Y-W%W-%w", "2017-01-04");
         test("w50+5",     "2017-W50-5", "%Y-W%W-%w", "2017-12-15");
         test("w0",        "2024-W00-6", "%Y-W%W-%w", "2023-12-30");
-        */
     }
 
-#if 0
     SECTION("%U week number, Sunday first day of the first week") {
         test("sunday",   "2017-W01-1",  "%Y-W%U-%w", "2017-01-02");
         test("monday",    "2018-W01-1", "%Y-W%U-%w", "2018-01-08");
-        /*
-        test("tuesday",   "2019-W01-1", "%Y-W%W-%w", "2019-01-07");
-        test("wednesday", "2014-W01-1", "%Y-W%W-%w", "2014-01-06");
-        test("thursday",  "2015-W01-1", "%Y-W%W-%w", "2015-01-05");
-        test("friday",    "2016-W01-1", "%Y-W%W-%w", "2016-01-04");
-        test("saturday",  "2022-W01-1", "%Y-W%W-%w", "2022-01-03");
+        test("tuesday",   "2019-W01-1", "%Y-W%U-%w", "2019-01-07");
+        test("wednesday", "2014-W01-1", "%Y-W%U-%w", "2014-01-06");
+        test("thursday",  "2015-W01-1", "%Y-W%U-%w", "2015-01-05");
+        test("friday",    "2016-W01-1", "%Y-W%U-%w", "2016-01-04");
+        test("saturday",  "2022-W01-1", "%Y-W%U-%w", "2022-01-03");
 
-        test("sunday+2",  "2017-W01-3", "%Y-W%W-%w", "2017-01-04");
-        test("w50+5",     "2017-W50-5", "%Y-W%W-%w", "2017-12-15");
-        test("w0",        "2024-W00-6", "%Y-W%W-%w", "2023-12-30");
-        */
+        test("sunday+2",  "2017-W01-3", "%Y-W%U-%w", "2017-01-04");
+        test("w50+5",     "2017-W50-5", "%Y-W%U-%w", "2017-12-15");
+        test("w0",        "2024-W00-6", "%Y-W%U-%w", "2024-01-06");
     }
-#endif
 
 }
