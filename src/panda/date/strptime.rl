@@ -71,6 +71,7 @@ struct MetaConsume {
     p_sec      := nn @sec @done;
     p_min      := nn @min @done;
     p_hour     := nn @hour @done;
+    p_hour_s   := (' ' | digit{1} $digit) digit{1} $digit @hour @done;
     p_hour_min := nn @hour ':' nn @min @done;
     p_hms      := nn @hour ':' nn @min ':' nn @sec @done;
     p_hmsAMPM  := nn @hour ':' nn @min ':' nn @sec ' '+ P_AMPM @done;
@@ -124,6 +125,7 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
     m_wnum_mon  = '%W' @{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::monday; fbreak; };
     m_wnum_sun  = '%U' @{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::sunday; fbreak; };
     m_hour      = ('%H' | '%I') @{ p_cs = parser_en_p_hour;      fbreak; };
+    m_hour_s    = ('%k' | '%l') @{ p_cs = parser_en_p_hour_s;    fbreak; };
     m_month     = '%m' @{ p_cs = parser_en_p_month;     fbreak; };
     m_mname     = ('%b' | '%B' | '%h')  @{ p_cs = parser_en_p_mname;     fbreak; };
     m_min       = '%M' @{ p_cs = parser_en_p_min;       fbreak; };
@@ -140,7 +142,7 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
 
     m_main := m_space | m_space_enc | m_perc | m_yr | m_AMPM | m_ampm | m_cent | m_day3 | m_mname |
               m_wnum_iso | m_wnum_mon | m_wnum_sun |
-              m_year | m_month | m_day | m_wday | m_wday_s | m_wname | m_hour | m_min | m_sec |
+              m_year | m_month | m_day | m_wday | m_wday_s | m_wname | m_hour | m_hour_s | m_min | m_sec |
               m_hour_min | m_hms | m_mdy | m_mdyhms | m_hmsAMPM | m_ymd
            ;
 }%%
