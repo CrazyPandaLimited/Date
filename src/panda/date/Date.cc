@@ -10,12 +10,14 @@ bool Date::_range_check = false;
 Date::Date (string_view str, string_view fmt) {
     strptime(str, fmt);
     if (_error == errc::ok) {
-        _has_date = true;
-        _has_epoch = false;
-        _normalized = false;
-        dsync();
-        dchg_auto();
-        if (_range_check) validate_range();
+        if (_has_date) {
+            _has_date = true;
+            _has_epoch = false;
+            _normalized = false;
+            dsync();
+            dchg_auto();
+            if (_range_check) validate_range();
+        }
     }
     else epoch(0);
 }

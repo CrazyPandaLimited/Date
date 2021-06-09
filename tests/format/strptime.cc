@@ -28,7 +28,7 @@ TEST("parse") {
     test("simple/multi-spaces", "03:04:00    2019-02-02", "%H:%M:%S %Y-%m-%d" ,"2019-02-02 03:04:00");
     test("simple/%k", "03:04:00 2019-02-02", "%k:%M:%S%n%Y-%m-%d" ,"2019-02-02 03:04:00");
     test("simple/%l", "03:04:00 2019-02-02", "%l:%M:%S%n%Y-%m-%d" ,"2019-02-02 03:04:00");
-    test("simple/%e", "03:04:00 2019-02- 2", "%l:%M:%S%n%Y-%m-%e" ,"2019-02-02 03:04:00");
+    test("simple/%e", "2019-02- 2", "%Y-%m-%e" ,"2019-02-02");
     test_err("simple/error", "aaa", "bbb");
     test("percent", "%03:04:00 2019-02-02", "%%%H:%M:%S %Y-%m-%d" ,"2019-02-02 03:04:00");
     test("%R aka %H:%M", "03:04:00 2019-02-02", "%R:%S %Y-%m-%d" ,"2019-02-02 03:04:00");
@@ -45,6 +45,7 @@ TEST("parse") {
     test("%V ISO8601 week number", "2017-W01-5", "%Y-W%V-%w" ,"2017-01-06");
     test("%u shifted week number", "2017-W01-5", "%Y-W%V-%u" ,"2017-01-05");
     test("%F ISO8601 %Y-%m-%d", "2017-02-02", "%F" ,"2017-02-02");
+    test("%s epoch", "500000000", "%s" ,"1985-11-05 03:53:20");
 
     SECTION("%W week number, Monday first day of the first week") {
         test("sunday",   "2017-W01-1",  "%Y-W%W-%w", "2017-01-02");

@@ -31,6 +31,7 @@ struct MetaConsume {
     action wday_s  { --acc; NSAVE(_date.wday); }
     action yday    { NSAVE(_date.mday);        }
     action week    { NSAVE(week);              }
+    action epoch   { NSAVE(epoch_);            }
     action month   { _date.mon = acc - 1; acc = 0; }
     action done    { fbreak; }
 
@@ -90,13 +91,14 @@ struct MetaConsume {
     p_year     := digit{4} $digit @year @done;
     p_yr       := nn @yr @done;
     p_cent     := nn @cent @done;
+    p_epoch    := digit+ $digit %epoch;
     p_perc     := '%'  @done;
     p_space    := ' '*  %done;
 }%%
 
 %% write data;
 
-static inline int _parse_str(int cs, const char* p, const char* pe, int& week, datetime& _date)  {
+static inline int _parse_str(int cs, const char* p, const char* pe, int& week, datetime& _date, ptime_t& epoch_)  {
     // printf("_parse_str cs=%d\n", cs);
     const char* pb  = p;
     const char* eof = pe;
@@ -137,11 +139,12 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
     m_ymd       = '%F' @{ p_cs = parser_en_p_ymd;       fbreak; };
     m_hms       = ('%T' | '%X')  @{ p_cs = parser_en_p_hms;       fbreak; };
     m_mdy       = ('%D' | '%x')  @{ p_cs = parser_en_p_mdy;       fbreak; };
+    m_epoch     = '%s'  @{ p_cs = parser_en_p_epoch;       fbreak; };
     m_perc      = '%%' @{ p_cs = parser_en_p_perc;      fbreak; };
     m_space_enc = ('%t' | '%n') @{ p_cs = parser_en_p_space;  fbreak; };
     m_space     = (' ' | '\t')+  @{ p_cs = parser_en_p_space; fbreak; };
 
-    m_main := m_space | m_space_enc | m_perc | m_yr | m_AMPM | m_ampm | m_cent | m_day3 | m_mname |
+    m_main := m_space | m_space_enc | m_perc | m_epoch | m_yr | m_AMPM | m_ampm | m_cent | m_day3 | m_mname |
               m_wnum_iso | m_wnum_mon | m_wnum_sun |
               m_year | m_month | m_day | m_day_s | m_wday | m_wday_s | m_wname | m_hour | m_hour_s | m_min | m_sec |
               m_hour_min | m_hms | m_mdy | m_mdyhms | m_hmsAMPM | m_ymd
@@ -168,8 +171,10 @@ void Date::strptime (string_view str, string_view format) {
     _date.mday = 1;
     _error = errc::ok;
     _mksec = 0;
+    _has_date = true;
 
-    int week = -1;
+    ptime_t epoch_ = 0;
+    int week       = -1;
     WeekInterpretation week_interptetation = WeekInterpretation::none;
 
     const char* m_p = format.data();
@@ -181,7 +186,7 @@ void Date::strptime (string_view str, string_view format) {
         // printf("cycle, meta='%s', str='%s'\n", m_p, s_p);
         auto meta_result = _parse_meta(m_p, m_e, week_interptetation);
         if (meta_result.cs) {
-            int consumed = _parse_str(meta_result.cs, s_p, s_e, week, _date);
+            int consumed = _parse_str(meta_result.cs, s_p, s_e, week, _date, epoch_);
             if (consumed >= 0) {
                 s_p += consumed;
             } else {
@@ -202,6 +207,12 @@ void Date::strptime (string_view str, string_view format) {
     }
 
     if (!(m_p == m_e && s_p == s_e)) { return; }
+    if (epoch_ != 0) {
+        epoch(epoch_);
+    } else {
+        _has_date = true;
+    }
+
     switch (week_interptetation) {
         case WeekInterpretation::none: break;
         case WeekInterpretation::iso: _post_parse_week((unsigned)week); break;
