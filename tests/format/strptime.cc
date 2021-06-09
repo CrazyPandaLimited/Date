@@ -20,8 +20,9 @@ static void test_err(string name, string_view str, string_view format) {
 
 TEST("parse") {
     test("simple", "03:04:00 2019-02-02", "%H:%M:%S %Y-%m-%d" ,"2019-02-02 03:04:00");
-    test("simple/am", "03:04:00 AM 2019-02-02", "%H:%M:%S %p %Y-%m-%d" ,"2019-02-02 03:04:00");
-    test("simple/pm", "03:04:00 PM 2019-02-02", "%H:%M:%S %p %Y-%m-%d" ,"2019-02-02 15:04:00");
+    test("simple/AM", "03:04:00 AM 2019-02-02", "%H:%M:%S %p %Y-%m-%d" ,"2019-02-02 03:04:00");
+    test("simple/PM", "03:04:00 PM 2019-02-02", "%H:%M:%S %p %Y-%m-%d" ,"2019-02-02 15:04:00");
+    test("simple/pm", "03:04:00 pm 2019-02-02", "%H:%M:%S %P %Y-%m-%d" ,"2019-02-02 15:04:00");
     test("simple/space", "03:04:00 2019-02-02", "%H:%M:%S%n%Y-%m-%d" ,"2019-02-02 03:04:00");
     test("simple/no-spaces", "03:04:002019-02-02", "%H:%M:%S%Y-%m-%d" ,"2019-02-02 03:04:00");
     test("simple/multi-spaces", "03:04:00    2019-02-02", "%H:%M:%S %Y-%m-%d" ,"2019-02-02 03:04:00");
