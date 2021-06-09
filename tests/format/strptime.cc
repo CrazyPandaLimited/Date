@@ -40,6 +40,7 @@ TEST("parse") {
     //test("%A week name/2", "Wed-06-99", "%A-%m-%y" ,"1999-06-02");
     test("%b month name", "02-March-99", "%d-%b-%y" ,"1999-03-02");
     test("%V ISO8601 week number", "2017-W01-5", "%Y-W%V-%w" ,"2017-01-06");
+    test("%u shifted week number", "2017-W01-5", "%Y-W%V-%u" ,"2017-01-05");
     test("%F ISO8601 %Y-%m-%d", "2017-02-02", "%F" ,"2017-02-02");
 
     SECTION("%W week number, Monday first day of the first week") {

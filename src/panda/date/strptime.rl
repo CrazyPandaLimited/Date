@@ -21,15 +21,16 @@ struct MetaConsume {
     }
 
     action cent    { _date.year += acc * 100; acc = 0; }
-    action year    { NSAVE(_date.year); }
-    action sec     { NSAVE(_date.sec);  }
-    action min     { NSAVE(_date.min);  }
-    action hour    { NSAVE(_date.hour); }
-    action hour_pm { _date.hour += 12;  }
-    action day     { NSAVE(_date.mday); }
-    action wday    { NSAVE(_date.wday)  }
-    action yday    { NSAVE(_date.mday); }
-    action week    { NSAVE(week); }
+    action year    { NSAVE(_date.year);        }
+    action sec     { NSAVE(_date.sec);         }
+    action min     { NSAVE(_date.min);         }
+    action hour    { NSAVE(_date.hour);        }
+    action hour_pm { _date.hour += 12;         }
+    action day     { NSAVE(_date.mday);        }
+    action wday    { NSAVE(_date.wday);        }
+    action wday_s  { --acc; NSAVE(_date.wday); }
+    action yday    { NSAVE(_date.mday);        }
+    action week    { NSAVE(week);              }
     action month   { _date.mon = acc - 1; acc = 0; }
     action done    { fbreak; }
 
@@ -80,6 +81,7 @@ struct MetaConsume {
     p_day3     := digit{3} $digit @yday @done;
     p_day_void := P_day_nn | (" " digit $digit) @day @done;
     p_wday     := digit{1} $digit @wday @done;
+    p_wday_s   := digit{1} $digit @wday_s @done;
     p_wname    := P_wname %done;
     p_wnum     := nn >{ week = 0;} @week @done;
     p_month    := nn @month @done;
@@ -116,6 +118,7 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
     m_day       = '%d' @{ p_cs = parser_en_p_day;       fbreak; };
     m_day3      = '%j' @{ p_cs = parser_en_p_day3;      fbreak; };
     m_wday      = '%w' @{ p_cs = parser_en_p_wday;      fbreak; };
+    m_wday_s    = '%u' @{ p_cs = parser_en_p_wday_s;    fbreak; };
     m_wname     = ('%a' | '%A') @{ p_cs = parser_en_p_wname; fbreak; };
     m_wnum_iso  = '%V' @{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::iso;    fbreak; };
     m_wnum_mon  = '%W' @{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::monday; fbreak; };
@@ -137,7 +140,7 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
 
     m_main := m_space | m_space_enc | m_perc | m_yr | m_AMPM | m_ampm | m_cent | m_day3 | m_mname |
               m_wnum_iso | m_wnum_mon | m_wnum_sun |
-              m_year | m_month | m_day | m_wday | m_wname | m_hour | m_min | m_sec |
+              m_year | m_month | m_day | m_wday | m_wday_s | m_wname | m_hour | m_min | m_sec |
               m_hour_min | m_hms | m_mdy | m_mdyhms | m_hmsAMPM | m_ymd
            ;
 }%%
