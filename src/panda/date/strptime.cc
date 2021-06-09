@@ -38,7 +38,7 @@ static const int parser_en_p_ymd = 48;
 static const int parser_en_p_mdyhms = 58;
 static const int parser_en_p_day = 75;
 static const int parser_en_p_day3 = 77;
-static const int parser_en_p_day_void = 80;
+static const int parser_en_p_day_s = 80;
 static const int parser_en_p_wday = 82;
 static const int parser_en_p_wday_s = 83;
 static const int parser_en_p_wname = 84;
@@ -2665,7 +2665,7 @@ case 221:
 }
 
 
-#line 148 "src/panda/date/strptime.rl"
+#line 149 "src/panda/date/strptime.rl"
 
 
 
@@ -2677,7 +2677,7 @@ static const int meta_parser_error = 0;
 static const int meta_parser_en_m_main = 1;
 
 
-#line 151 "src/panda/date/strptime.rl"
+#line 152 "src/panda/date/strptime.rl"
 
 static inline MetaConsume _parse_meta(const char* p, const char* pe, WeekInterpretation& week_interptetation)  {
     const char* pb     = p;
@@ -2703,7 +2703,7 @@ st0:
 cs = 0;
 	goto _out;
 tr0:
-#line 141 "src/panda/date/strptime.rl"
+#line 142 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_space; {p++; cs = 3; goto _out;} }
 	goto st3;
 st3:
@@ -2739,37 +2739,38 @@ case 2:
 		case 98: goto tr5;
 		case 99: goto tr19;
 		case 100: goto tr20;
+		case 101: goto tr21;
 		case 104: goto tr5;
-		case 106: goto tr21;
-		case 109: goto tr23;
-		case 110: goto tr24;
-		case 112: goto tr25;
-		case 114: goto tr26;
-		case 116: goto tr24;
-		case 117: goto tr27;
-		case 119: goto tr28;
+		case 106: goto tr22;
+		case 109: goto tr24;
+		case 110: goto tr25;
+		case 112: goto tr26;
+		case 114: goto tr27;
+		case 116: goto tr25;
+		case 117: goto tr28;
+		case 119: goto tr29;
 		case 120: goto tr7;
-		case 121: goto tr29;
+		case 121: goto tr30;
 	}
 	if ( (*p) < 84 ) {
 		if ( 72 <= (*p) && (*p) <= 73 )
 			goto tr9;
 	} else if ( (*p) > 88 ) {
 		if ( 107 <= (*p) && (*p) <= 108 )
-			goto tr22;
+			goto tr23;
 	} else
 		goto tr14;
 	goto st0;
 tr3:
-#line 139 "src/panda/date/strptime.rl"
+#line 140 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_perc;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr4:
-#line 123 "src/panda/date/strptime.rl"
+#line 124 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_wname; {p++; cs = 4; goto _out;} }
 	goto st4;
 tr5:
-#line 130 "src/panda/date/strptime.rl"
+#line 131 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_mname;     {p++; cs = 4; goto _out;} }
 	goto st4;
 tr6:
@@ -2777,19 +2778,19 @@ tr6:
 	{ p_cs = parser_en_p_cent;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr7:
-#line 138 "src/panda/date/strptime.rl"
+#line 139 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_mdy;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr8:
-#line 136 "src/panda/date/strptime.rl"
+#line 137 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_ymd;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr9:
-#line 127 "src/panda/date/strptime.rl"
+#line 128 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_hour;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr10:
-#line 131 "src/panda/date/strptime.rl"
+#line 132 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_min;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr11:
@@ -2797,27 +2798,27 @@ tr11:
 	{ p_cs = parser_en_p_ampm;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr12:
-#line 133 "src/panda/date/strptime.rl"
+#line 134 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_hour_min;  {p++; cs = 4; goto _out;} }
 	goto st4;
 tr13:
-#line 132 "src/panda/date/strptime.rl"
+#line 133 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_sec;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr14:
-#line 137 "src/panda/date/strptime.rl"
+#line 138 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_hms;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr15:
-#line 126 "src/panda/date/strptime.rl"
+#line 127 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::sunday; {p++; cs = 4; goto _out;} }
 	goto st4;
 tr16:
-#line 124 "src/panda/date/strptime.rl"
+#line 125 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::iso;    {p++; cs = 4; goto _out;} }
 	goto st4;
 tr17:
-#line 125 "src/panda/date/strptime.rl"
+#line 126 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::monday; {p++; cs = 4; goto _out;} }
 	goto st4;
 tr18:
@@ -2825,7 +2826,7 @@ tr18:
 	{ p_cs = parser_en_p_year;      {p++; cs = 4; goto _out;} }
 	goto st4;
 tr19:
-#line 134 "src/panda/date/strptime.rl"
+#line 135 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_mdyhms;    {p++; cs = 4; goto _out;} }
 	goto st4;
 tr20:
@@ -2833,38 +2834,42 @@ tr20:
 	{ p_cs = parser_en_p_day;       {p++; cs = 4; goto _out;} }
 	goto st4;
 tr21:
+#line 121 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_day_s;     {p++; cs = 4; goto _out;} }
+	goto st4;
+tr22:
 #line 120 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_day3;      {p++; cs = 4; goto _out;} }
 	goto st4;
-tr22:
-#line 128 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_hour_s;    {p++; cs = 4; goto _out;} }
-	goto st4;
 tr23:
 #line 129 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_month;     {p++; cs = 4; goto _out;} }
+	{ p_cs = parser_en_p_hour_s;    {p++; cs = 4; goto _out;} }
 	goto st4;
 tr24:
-#line 140 "src/panda/date/strptime.rl"
-	{ p_cs = parser_en_p_space;  {p++; cs = 4; goto _out;} }
+#line 130 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_month;     {p++; cs = 4; goto _out;} }
 	goto st4;
 tr25:
+#line 141 "src/panda/date/strptime.rl"
+	{ p_cs = parser_en_p_space;  {p++; cs = 4; goto _out;} }
+	goto st4;
+tr26:
 #line 115 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_AMPM;      {p++; cs = 4; goto _out;} }
 	goto st4;
-tr26:
-#line 135 "src/panda/date/strptime.rl"
+tr27:
+#line 136 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_hmsAMPM;       {p++; cs = 4; goto _out;} }
 	goto st4;
-tr27:
-#line 122 "src/panda/date/strptime.rl"
+tr28:
+#line 123 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_wday_s;    {p++; cs = 4; goto _out;} }
 	goto st4;
-tr28:
-#line 121 "src/panda/date/strptime.rl"
+tr29:
+#line 122 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_wday;      {p++; cs = 4; goto _out;} }
 	goto st4;
-tr29:
+tr30:
 #line 114 "src/panda/date/strptime.rl"
 	{ p_cs = parser_en_p_yr;        {p++; cs = 4; goto _out;} }
 	goto st4;
@@ -2872,7 +2877,7 @@ st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 2876 "src/panda/date/strptime.cc"
+#line 2881 "src/panda/date/strptime.cc"
 	goto st0;
 	}
 	_test_eof3: cs = 3; goto _test_eof; 
@@ -2883,7 +2888,7 @@ case 4:
 	_out: {}
 	}
 
-#line 159 "src/panda/date/strptime.rl"
+#line 160 "src/panda/date/strptime.rl"
 
     auto consumed = p - pb;
     // printf("_parse_meta '%s' p_cs=%d, c=%d, cs=%d\n", pb, p_cs, consumed, cs);
