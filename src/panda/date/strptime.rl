@@ -12,6 +12,12 @@ struct MetaConsume {
     int consumed;
 };
 
+struct TZInfo {
+    char rule[14];
+    int  len = 0;
+};
+
+
 %%{
     machine parser;
 
@@ -39,6 +45,27 @@ struct MetaConsume {
         if (acc <= 50) _date.year = 2000 + acc;
         else           _date.year = 1900 + acc;
         acc = 0;
+    }
+
+    action tzsign {
+        tzi.rule[0] = '<';
+        tzi.rule[1] = *p;
+        tzi.rule[4] = ':';
+        tzi.rule[7] = '>';
+        tzi.rule[8] = *p ^ 6; // swap '+'<->'-': yes, it is reversed
+        tzi.rule[11] = ':';
+        tzi.rule[5] = tzi.rule[6] = tzi.rule[12] = tzi.rule[13] = '0'; // in case there will be no minutes
+        tzi.len = 14;
+    }
+
+    action tzhour {
+        tzi.rule[2] = tzi.rule[9]  = *(p-2);
+        tzi.rule[3] = tzi.rule[10] = *(p-1);
+    }
+
+    action tzmin {
+        tzi.rule[5] = tzi.rule[12] = *(p-2);
+        tzi.rule[6] = tzi.rule[13] = *(p-1);
     }
 
     nn         = digit{2} $digit;
@@ -92,13 +119,14 @@ struct MetaConsume {
     p_yr       := nn @yr @done;
     p_cent     := nn @cent @done;
     p_epoch    := digit+ $digit %epoch;
+    p_tz_num   := [+\-] $tzsign nn @tzhour nn %tzmin @done;
     p_perc     := '%'  @done;
     p_space    := ' '*  %done;
 }%%
 
 %% write data;
 
-static inline int _parse_str(int cs, const char* p, const char* pe, int& week, datetime& _date, ptime_t& epoch_)  {
+static inline int _parse_str(int cs, const char* p, const char* pe, int& week, datetime& _date, ptime_t& epoch_, TZInfo& tzi)  {
     // printf("_parse_str cs=%d\n", cs);
     const char* pb  = p;
     const char* eof = pe;
@@ -113,36 +141,37 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
 
 %%{
     machine meta_parser;
-    m_yr        = '%y' @{ p_cs = parser_en_p_yr;        fbreak; };
-    m_AMPM      = '%p' @{ p_cs = parser_en_p_AMPM;      fbreak; };
-    m_ampm      = '%P' @{ p_cs = parser_en_p_ampm;      fbreak; };
-    m_year      = '%Y' @{ p_cs = parser_en_p_year;      fbreak; };
-    m_cent      = '%C' @{ p_cs = parser_en_p_cent;      fbreak; };
-    m_day       = '%d' @{ p_cs = parser_en_p_day;       fbreak; };
-    m_day3      = '%j' @{ p_cs = parser_en_p_day3;      fbreak; };
-    m_day_s     = '%e' @{ p_cs = parser_en_p_day_s;     fbreak; };
-    m_wday      = '%w' @{ p_cs = parser_en_p_wday;      fbreak; };
-    m_wday_s    = '%u' @{ p_cs = parser_en_p_wday_s;    fbreak; };
-    m_wname     = ('%a' | '%A') @{ p_cs = parser_en_p_wname; fbreak; };
+    m_yr        = '%y' @{ p_cs = parser_en_p_yr;                                                     fbreak; };
+    m_AMPM      = '%p' @{ p_cs = parser_en_p_AMPM;                                                   fbreak; };
+    m_ampm      = '%P' @{ p_cs = parser_en_p_ampm;                                                   fbreak; };
+    m_year      = '%Y' @{ p_cs = parser_en_p_year;                                                   fbreak; };
+    m_cent      = '%C' @{ p_cs = parser_en_p_cent;                                                   fbreak; };
+    m_day       = '%d' @{ p_cs = parser_en_p_day;                                                    fbreak; };
+    m_day3      = '%j' @{ p_cs = parser_en_p_day3;                                                   fbreak; };
+    m_day_s     = '%e' @{ p_cs = parser_en_p_day_s;                                                  fbreak; };
+    m_wday      = '%w' @{ p_cs = parser_en_p_wday;                                                   fbreak; };
+    m_wday_s    = '%u' @{ p_cs = parser_en_p_wday_s;                                                 fbreak; };
+    m_wname     = ('%a' | '%A') @{ p_cs = parser_en_p_wname;                                         fbreak; };
     m_wnum_iso  = '%V' @{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::iso;    fbreak; };
     m_wnum_mon  = '%W' @{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::monday; fbreak; };
     m_wnum_sun  = '%U' @{ p_cs = parser_en_p_wnum; week_interptetation = WeekInterpretation::sunday; fbreak; };
-    m_hour      = ('%H' | '%I') @{ p_cs = parser_en_p_hour;      fbreak; };
-    m_hour_s    = ('%k' | '%l') @{ p_cs = parser_en_p_hour_s;    fbreak; };
-    m_month     = '%m' @{ p_cs = parser_en_p_month;     fbreak; };
-    m_mname     = ('%b' | '%B' | '%h')  @{ p_cs = parser_en_p_mname;     fbreak; };
-    m_min       = '%M' @{ p_cs = parser_en_p_min;       fbreak; };
-    m_sec       = '%S' @{ p_cs = parser_en_p_sec;       fbreak; };
-    m_hour_min  = '%R' @{ p_cs = parser_en_p_hour_min;  fbreak; };
-    m_mdyhms    = '%c' @{ p_cs = parser_en_p_mdyhms;    fbreak; };
-    m_hmsAMPM   = '%r'  @{ p_cs = parser_en_p_hmsAMPM;       fbreak; };
-    m_ymd       = '%F' @{ p_cs = parser_en_p_ymd;       fbreak; };
-    m_hms       = ('%T' | '%X')  @{ p_cs = parser_en_p_hms;       fbreak; };
-    m_mdy       = ('%D' | '%x')  @{ p_cs = parser_en_p_mdy;       fbreak; };
-    m_epoch     = '%s'  @{ p_cs = parser_en_p_epoch;       fbreak; };
-    m_perc      = '%%' @{ p_cs = parser_en_p_perc;      fbreak; };
-    m_space_enc = ('%t' | '%n') @{ p_cs = parser_en_p_space;  fbreak; };
-    m_space     = (' ' | '\t')+  @{ p_cs = parser_en_p_space; fbreak; };
+    m_hour      = ('%H' | '%I') @{ p_cs = parser_en_p_hour;                                          fbreak; };
+    m_hour_s    = ('%k' | '%l') @{ p_cs = parser_en_p_hour_s;                                        fbreak; };
+    m_month     = '%m' @{ p_cs = parser_en_p_month;                                                  fbreak; };
+    m_mname     = ('%b' | '%B' | '%h')  @{ p_cs = parser_en_p_mname;                                 fbreak; };
+    m_min       = '%M' @{ p_cs = parser_en_p_min;                                                    fbreak; };
+    m_sec       = '%S' @{ p_cs = parser_en_p_sec;                                                    fbreak; };
+    m_hour_min  = '%R' @{ p_cs = parser_en_p_hour_min;                                               fbreak; };
+    m_mdyhms    = '%c' @{ p_cs = parser_en_p_mdyhms;                                                 fbreak; };
+    m_hmsAMPM   = '%r'  @{ p_cs = parser_en_p_hmsAMPM;                                               fbreak; };
+    m_ymd       = '%F' @{ p_cs = parser_en_p_ymd;                                                    fbreak; };
+    m_hms       = ('%T' | '%X')  @{ p_cs = parser_en_p_hms;                                          fbreak; };
+    m_mdy       = ('%D' | '%x')  @{ p_cs = parser_en_p_mdy;                                          fbreak; };
+    m_epoch     = '%s'  @{ p_cs = parser_en_p_epoch;                                                 fbreak; };
+    m_tz_num    = '%z'  @{ p_cs = parser_en_p_tz_num                                                 fbreak; };
+    m_perc      = '%%' @{ p_cs = parser_en_p_perc;                                                   fbreak; };
+    m_space_enc = ('%t' | '%n') @{ p_cs = parser_en_p_space;                                         fbreak; };
+    m_space     = (' ' | '\t')+  @{ p_cs = parser_en_p_space;                                        fbreak; };
 
     m_main := m_space | m_space_enc | m_perc | m_epoch | m_yr | m_AMPM | m_ampm | m_cent | m_day3 | m_mname |
               m_wnum_iso | m_wnum_mon | m_wnum_sun |
@@ -176,6 +205,7 @@ void Date::strptime (string_view str, string_view format) {
     ptime_t epoch_ = 0;
     int week       = -1;
     WeekInterpretation week_interptetation = WeekInterpretation::none;
+    TZInfo tzi;
 
     const char* m_p = format.data();
     const char* m_e = m_p + format.length();
@@ -186,7 +216,7 @@ void Date::strptime (string_view str, string_view format) {
         // printf("cycle, meta='%s', str='%s'\n", m_p, s_p);
         auto meta_result = _parse_meta(m_p, m_e, week_interptetation);
         if (meta_result.cs) {
-            int consumed = _parse_str(meta_result.cs, s_p, s_e, week, _date, epoch_);
+            int consumed = _parse_str(meta_result.cs, s_p, s_e, week, _date, epoch_, tzi);
             if (consumed >= 0) {
                 s_p += consumed;
             } else {
