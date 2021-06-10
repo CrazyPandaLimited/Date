@@ -58,15 +58,10 @@ struct TZInfo {
         tzi.len = 14;
     }
 
-    action tzhour {
-        tzi.rule[2] = tzi.rule[9]  = *(p-2);
-        tzi.rule[3] = tzi.rule[10] = *(p-1);
-    }
-
-    action tzmin {
-        tzi.rule[5] = tzi.rule[12] = *(p-2);
-        tzi.rule[6] = tzi.rule[13] = *(p-1);
-    }
+    action tz_h1 { tzi.rule[2] = tzi.rule[9]  = *p; }
+    action tz_h2 { tzi.rule[3] = tzi.rule[10] = *p; }
+    action tz_m1 { tzi.rule[5] = tzi.rule[12] = *p; }
+    action tz_m2 { tzi.rule[6] = tzi.rule[13] = *p; }
 
     nn         = digit{2} $digit;
     P_day_nn   = nn @day @done;
@@ -119,7 +114,7 @@ struct TZInfo {
     p_yr       := nn @yr @done;
     p_cent     := nn @cent @done;
     p_epoch    := digit+ $digit %epoch;
-    p_tz_num   := [+\-] $tzsign nn @tzhour nn %tzmin @done;
+    p_tz_num   := [+\-] $tzsign (digit $tz_h1 digit $tz_h2) (digit $tz_m1 digit $tz_m2) @done;
     p_perc     := '%'  @done;
     p_space    := ' '*  %done;
 }%%
@@ -168,13 +163,13 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
     m_hms       = ('%T' | '%X')  @{ p_cs = parser_en_p_hms;                                          fbreak; };
     m_mdy       = ('%D' | '%x')  @{ p_cs = parser_en_p_mdy;                                          fbreak; };
     m_epoch     = '%s'  @{ p_cs = parser_en_p_epoch;                                                 fbreak; };
-    m_tz_num    = '%z'  @{ p_cs = parser_en_p_tz_num                                                 fbreak; };
+    m_tz_num    = '%z'  @{ p_cs = parser_en_p_tz_num;                                                fbreak; };
     m_perc      = '%%' @{ p_cs = parser_en_p_perc;                                                   fbreak; };
     m_space_enc = ('%t' | '%n') @{ p_cs = parser_en_p_space;                                         fbreak; };
     m_space     = (' ' | '\t')+  @{ p_cs = parser_en_p_space;                                        fbreak; };
 
     m_main := m_space | m_space_enc | m_perc | m_epoch | m_yr | m_AMPM | m_ampm | m_cent | m_day3 | m_mname |
-              m_wnum_iso | m_wnum_mon | m_wnum_sun |
+              m_wnum_iso | m_wnum_mon | m_wnum_sun | m_tz_num |
               m_year | m_month | m_day | m_day_s | m_wday | m_wday_s | m_wname | m_hour | m_hour_s | m_min | m_sec |
               m_hour_min | m_hms | m_mdy | m_mdyhms | m_hmsAMPM | m_ymd
            ;
@@ -236,7 +231,11 @@ void Date::strptime (string_view str, string_view format) {
         m_p += meta_result.consumed;
     }
 
-    if (!(m_p == m_e && s_p == s_e)) { return; }
+    if (!(m_p == m_e && s_p == s_e)) {
+        _error = errc::parser_error;
+        return;
+    }
+
     if (epoch_ != 0) {
         epoch(epoch_);
     } else {
@@ -261,6 +260,8 @@ void Date::strptime (string_view str, string_view format) {
             //printf("y = %d, wday = %d, delta = %d, beg = %d\n", _date.year, _date.wday, delta, beginning_weekday);
             _date.mday = week * 7  + (_date.wday - 1) - delta;
     }
+
+    if (tzi.len) _zone = panda::time::tzget(string_view(tzi.rule, tzi.len));
 }
 
 }}

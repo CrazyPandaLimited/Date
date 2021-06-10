@@ -143,7 +143,7 @@ static string get_localzone_name () {
 
 static TimezoneSP _tzget (const string_view& zname) {
     auto zonename = string(zname);
-    //printf("ptime: tzget for zone %s\n", zonename);
+    // printf("ptime: tzget for zone %s\n", zonename.c_str());
     auto zone = new Timezone();
     TimezoneSP ret = zone;
     zone->is_local = false;
