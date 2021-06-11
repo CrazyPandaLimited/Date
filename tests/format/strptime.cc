@@ -4,14 +4,11 @@
 
 static void test (string name, string_view str, string_view format,  string_view expected, string_view tz = "") {
     SECTION(name) {
-        auto z1 = tzget("MSK");
-        auto z2 = tzget(string(" MSK").substr(1));
-
         TimezoneSP zone;
         if (!tz.empty()) {zone = tzget(tz) ; }
 
         Date d2(expected, zone);
-        Date d1(str, format);
+        Date d1 = Date::strptime(str, format);
         CHECK(d1 == d2);
         CHECK(d1.epoch() == d2.epoch());
     }
@@ -19,7 +16,7 @@ static void test (string name, string_view str, string_view format,  string_view
 
 static void test_err(string name, string_view str, string_view format) {
     SECTION(name) {
-        Date d(str, format);
+        auto d = Date::strptime(str, format);
         CHECK(d.error());
     }
 }

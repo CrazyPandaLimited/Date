@@ -7,19 +7,22 @@ namespace panda { namespace date {
 
 bool Date::_range_check = false;
 
-Date::Date (string_view str, string_view fmt) {
-    strptime(str, fmt);
-    if (_error == errc::ok) {
-        if (_has_date) {
-            _has_date = true;
-            _has_epoch = false;
-            _normalized = false;
-            dsync();
-            dchg_auto();
-            if (_range_check) validate_range();
+
+Date Date::strptime (string_view str, string_view fmt) {
+    Date d;
+    d._strptime(str, fmt);
+    if (d._error == errc::ok) {
+        if (d._has_date) {
+            d._has_date = true;
+            d._has_epoch = false;
+            d._normalized = false;
+            d.dsync();
+            d.dchg_auto();
+            if (_range_check) d.validate_range();
         }
     }
-    else epoch(0);
+    else d.epoch(0);
+    return d;
 }
 
 

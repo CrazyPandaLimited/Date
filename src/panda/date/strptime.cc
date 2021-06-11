@@ -3058,7 +3058,7 @@ case 4:
     return MetaConsume { p_cs, (int)consumed };
 }
 
-void Date::strptime (string_view str, string_view format) {
+void Date::_strptime (string_view str, string_view format) {
     memset(&_date, 0, sizeof(_date)); // reset all values
     _date.mday = 1;
     _error = errc::ok;

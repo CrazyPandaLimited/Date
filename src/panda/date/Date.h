@@ -63,6 +63,8 @@ struct Date {
     }
 
     static ptime_t today_epoch ();
+    static Date strptime (string_view str, string_view fmt);
+
 
     Date () { set((ptime_t)0, nullptr); }
 
@@ -80,7 +82,6 @@ struct Date {
     }
 
     Date (const Date& source, const TimezoneSP& zone = {}) { set(source, zone); }
-    Date (string_view str, string_view fmt);
 
 
     void set (ptime_t ep, const TimezoneSP& zone = {}) {
@@ -282,7 +283,7 @@ private:
     mutable uint32_t _mksec;
 
     void parse (string_view, int);
-    void strptime(string_view, string_view);
+    void _strptime(string_view, string_view);
 
     void esync () const;
     void dsync () const;
