@@ -115,13 +115,14 @@ struct TZInfo {
     p_cent     := nn @cent @done;
     p_epoch    := digit+ $digit %epoch;
     p_tz_num   := [+\-] $tzsign (digit $tz_h1 digit $tz_h2) (digit $tz_m1 digit $tz_m2) @done;
+    p_tz_name  := [a-zA-Z+-/]+ >{tz_b = p;} %{tz_e = p;} %done;
     p_perc     := '%'  @done;
     p_space    := ' '*  %done;
 }%%
 
 %% write data;
 
-static inline int _parse_str(int cs, const char* p, const char* pe, int& week, datetime& _date, ptime_t& epoch_, TZInfo& tzi)  {
+static inline int _parse_str(int cs, const char* p, const char* pe, int& week, datetime& _date, ptime_t& epoch_, TZInfo& tzi, const char*& tz_b, const char*& tz_e)  {
     // printf("_parse_str cs=%d\n", cs);
     const char* pb  = p;
     const char* eof = pe;
@@ -164,12 +165,13 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
     m_mdy       = ('%D' | '%x')  @{ p_cs = parser_en_p_mdy;                                          fbreak; };
     m_epoch     = '%s'  @{ p_cs = parser_en_p_epoch;                                                 fbreak; };
     m_tz_num    = '%z'  @{ p_cs = parser_en_p_tz_num;                                                fbreak; };
+    m_tz_name   = '%Z'  @{ p_cs = parser_en_p_tz_name;                                               fbreak; };
     m_perc      = '%%' @{ p_cs = parser_en_p_perc;                                                   fbreak; };
     m_space_enc = ('%t' | '%n') @{ p_cs = parser_en_p_space;                                         fbreak; };
     m_space     = (' ' | '\t')+  @{ p_cs = parser_en_p_space;                                        fbreak; };
 
     m_main := m_space | m_space_enc | m_perc | m_epoch | m_yr | m_AMPM | m_ampm | m_cent | m_day3 | m_mname |
-              m_wnum_iso | m_wnum_mon | m_wnum_sun | m_tz_num |
+              m_wnum_iso | m_wnum_mon | m_wnum_sun | m_tz_num | m_tz_name |
               m_year | m_month | m_day | m_day_s | m_wday | m_wday_s | m_wname | m_hour | m_hour_s | m_min | m_sec |
               m_hour_min | m_hms | m_mdy | m_mdyhms | m_hmsAMPM | m_ymd
            ;
@@ -206,12 +208,14 @@ void Date::strptime (string_view str, string_view format) {
     const char* m_e = m_p + format.length();
     const char* s_p = str.data();
     const char* s_e = s_p + str.length();
+    const char* tz_b = nullptr;
+    const char* tz_e = nullptr;
 
     while((m_p != m_e) && (s_p != s_e)) {
         // printf("cycle, meta='%s', str='%s'\n", m_p, s_p);
         auto meta_result = _parse_meta(m_p, m_e, week_interptetation);
         if (meta_result.cs) {
-            int consumed = _parse_str(meta_result.cs, s_p, s_e, week, _date, epoch_, tzi);
+            int consumed = _parse_str(meta_result.cs, s_p, s_e, week, _date, epoch_, tzi, tz_b, tz_e);
             if (consumed >= 0) {
                 s_p += consumed;
             } else {
@@ -231,7 +235,7 @@ void Date::strptime (string_view str, string_view format) {
         m_p += meta_result.consumed;
     }
 
-    if (!(m_p == m_e && s_p == s_e)) {
+    if ((m_p < m_e) || (s_p < s_e)) {
         _error = errc::parser_error;
         return;
     }
@@ -262,6 +266,7 @@ void Date::strptime (string_view str, string_view format) {
     }
 
     if (tzi.len) _zone = panda::time::tzget(string_view(tzi.rule, tzi.len));
+    if (tz_e) _zone = panda::time::tzget(string_view(tz_b, tz_e - tz_b));
 }
 
 }}
