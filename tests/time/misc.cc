@@ -45,12 +45,12 @@ TEST("tzget_abbr") {
     SECTION("MSK") {
         auto tz = tzget_abbr("MSK");
         CHECK(tz->name == "MSK");
-        CHECK(tz->future.outer.offset >= 0);
+        CHECK(tz->future.outer.gmt_offset >= 2 * 3600);
     }
     SECTION("EEST") {
         auto tz = tzget_abbr("EEST");
         CHECK(tz->name == "EEST");
-        CHECK(tz->future.outer.offset >= 0);
+        CHECK(tz->future.outer.gmt_offset >= 2 * 3600);
     }
     SECTION("non-existing tz") {
         auto tz = tzget_abbr("zzzzz");

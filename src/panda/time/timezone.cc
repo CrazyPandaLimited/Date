@@ -219,47 +219,56 @@ static TimezoneSP _tzget (const string_view& zname) {
 }
 
 static TimezoneSP _tzget_abbr (const string_view& target_abbr) {
+    TimezoneSP target_zone;
+
     for(auto& zone_name: available_timezones()) {
         auto zone = _tzget(zone_name);
-        bool found = false;
-        for(size_t i = 0; i < zone->trans_cnt; ++i) {
-            auto trans = zone->trans[i];
-            if (target_abbr == trans.abbrev) {
-                found = true;
-            }
-        }
-        if (!found) {
-            auto& future = zone->future;
-            if (target_abbr == future.outer.abbrev) {
-                found = true;
-            } else if (future.hasdst && target_abbr == future.inner.abbrev){
-                found = true;
-            }
-        }
-        if (found) {
-            // <MSK>-3
-            auto z = new Timezone();
-            auto vzone = TimezoneSP(z);
-            z->future = zone->future;
-            z->name   = target_abbr;
-
-            z->leaps_cnt = 0;
-            z->leaps = NULL;
-            z->trans_cnt = 1;
-            z->trans = new Timezone::Transition[z->trans_cnt];
-            std::memset(z->trans, 0, sizeof(Timezone::Transition));
-            z->trans[0].start       = EPOCH_NEGINF;
-            z->trans[0].local_start = EPOCH_NEGINF;
-            z->trans[0].local_lower = EPOCH_NEGINF;
-            z->trans[0].local_upper = EPOCH_NEGINF;
-            z->trans[0].leap_corr   = 0;
-            z->trans[0].leap_delta  = 0;
-            z->trans[0].leap_end    = EPOCH_NEGINF;
-            z->trans[0].leap_lend   = EPOCH_NEGINF;
-            z->ltrans = zone->trans[0];
-            return vzone;
+        auto& future = zone->future;
+        if (target_abbr == future.outer.abbrev) {
+            target_zone = zone;
+            break;
+        } else if (future.hasdst && target_abbr == future.inner.abbrev){
+            target_zone = zone;
+            break;
         }
     }
+
+    if (!target_zone) {
+        for(auto& zone_name: available_timezones()) {
+            auto zone = _tzget(zone_name);
+            for(size_t i = 0; i < zone->trans_cnt; ++i) {
+                auto trans = zone->trans[i];
+                if (target_abbr == trans.abbrev) {
+                    target_zone = zone;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (target_zone) {
+        auto z = new Timezone();
+        auto vzone = TimezoneSP(z);
+        z->future = target_zone->future;
+        z->name   = target_abbr;
+
+        z->leaps_cnt = 0;
+        z->leaps = NULL;
+        z->trans_cnt = 1;
+        z->trans = new Timezone::Transition[z->trans_cnt];
+        std::memset(z->trans, 0, sizeof(Timezone::Transition));
+        z->trans[0].start       = EPOCH_NEGINF;
+        z->trans[0].local_start = EPOCH_NEGINF;
+        z->trans[0].local_lower = EPOCH_NEGINF;
+        z->trans[0].local_upper = EPOCH_NEGINF;
+        z->trans[0].leap_corr   = 0;
+        z->trans[0].leap_delta  = 0;
+        z->trans[0].leap_end    = EPOCH_NEGINF;
+        z->trans[0].leap_lend   = EPOCH_NEGINF;
+        z->ltrans = target_zone->trans[0];
+        return vzone;
+    }
+
 
     auto z = new Timezone();
     TimezoneSP vzone = z;
