@@ -240,11 +240,8 @@ static TimezoneSP _tzget_abbr (const string_view& target_abbr) {
             // <MSK>-3
             auto z = new Timezone();
             auto vzone = TimezoneSP(z);
-            z->future.outer.offset = zone->future.outer.gmt_offset;
-            z->future.inner.offset = zone->future.inner.gmt_offset;
-            z->future.delta        = zone->future.inner.offset - zone->future.outer.offset;
-            z->future.max_offset   = std::max(zone->future.outer.offset, zone->future.inner.offset);
-            z->name                = target_abbr;
+            z->future = zone->future;
+            z->name   = target_abbr;
 
             z->leaps_cnt = 0;
             z->leaps = NULL;
