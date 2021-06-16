@@ -44,8 +44,9 @@ struct datetime {
 struct Timezone;
 using TimezoneSP = panda::iptr<const Timezone>;
 
-TimezoneSP        tzget   (const string_view& zonename);
-const TimezoneSP& tzlocal ();
+TimezoneSP        tzget      (const string_view& zonename);
+TimezoneSP        tzget_abbr (const string_view& zoneabbr);
+const TimezoneSP& tzlocal    ();
 
 void tzset (const string_view& zonename);
 void tzset (const TimezoneSP& = {});

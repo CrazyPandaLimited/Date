@@ -9,6 +9,7 @@
 #include <panda/string.h>
 #include <panda/unordered_string_map.h>
 #include "os.icc"
+#include "time.h"
 
 namespace panda { namespace time {
 
@@ -19,6 +20,8 @@ static constexpr const char GMT_FALLBACK[] = "GMT0";
 static string _tzdir;
 static string _tzsysdir = __PTIME_TZDIR;
 static string _tzembededdir = PANDA_DATE_ZONEINFO_DIR;
+
+enum class CacheKey { name, abbr };
 
 struct Data {
     uint64_t   rev = 0;
@@ -65,7 +68,8 @@ static inline Data& get_synced_data () {
     return data;
 }
 
-static TimezoneSP _tzget (const string_view& zname);
+static TimezoneSP _tzget      (const string_view& zname);
+static TimezoneSP _tzget_abbr (const string_view& zabbr);
 
 static bool _virtual_zone     (const string_view& zonename, Timezone* zone);
 static void _virtual_fallback (Timezone* zone);
@@ -76,6 +80,7 @@ const TimezoneSP& tzlocal () {
     return data.localzone;
 }
 
+template<CacheKey key>
 static Timezones& get_tzcache () {
     if (std::this_thread::get_id() == get_glob().mt_id) {
         static Timezones tzcache;
@@ -90,16 +95,30 @@ static Timezones& get_tzcache () {
     }
 }
 
-TimezoneSP tzget (const string_view& zonename) {
-    if (!zonename.length()) return tzlocal();
+template<typename FnCache, typename FnImpl>
+static inline TimezoneSP generic_get(const string_view& key, FnCache&& get_cache, FnImpl&& get_impl) noexcept {
+    if (!key.length()) return tzlocal();
 
-    auto& tzcache = get_tzcache();
-    auto it = tzcache.find(zonename);
-    if (it != tzcache.cend()) return it->second;
-    auto strname = string(zonename);
-    auto zone = _tzget(strname);
-    tzcache.emplace(strname, zone);
+    auto& cache = get_cache();
+    auto it = cache.find(key);
+    if (it != cache.cend()) return it->second;
+    auto zone = get_impl(key);
+    cache.emplace(key, zone);
     return zone;
+}
+
+TimezoneSP tzget (const string_view& zonename) {
+    return generic_get(zonename,
+                       []()          -> Timezones& { return get_tzcache<CacheKey::name>(); },
+                       [](auto& str) -> TimezoneSP { return _tzget(str);                   }
+    );
+}
+
+TimezoneSP tzget_abbr (const string_view& zoneabbr) {
+    return generic_get(zoneabbr,
+                       []()          -> Timezones& { return get_tzcache<CacheKey::abbr>(); },
+                       [](auto& str) -> TimezoneSP { return _tzget_abbr(str);              }
+    );
 }
 
 void tzset (const TimezoneSP& _zone) {
@@ -197,6 +216,60 @@ static TimezoneSP _tzget (const string_view& zname) {
     }
     
     return ret;
+}
+
+static TimezoneSP _tzget_abbr (const string_view& target_abbr) {
+    for(auto& zone_name: available_timezones()) {
+        auto zone = _tzget(zone_name);
+        bool found = false;
+        for(size_t i = 0; i < zone->trans_cnt; ++i) {
+            auto trans = zone->trans[i];
+            if (target_abbr == trans.abbrev) {
+                found = true;
+            }
+        }
+        if (!found) {
+            auto& future = zone->future;
+            if (target_abbr == future.outer.abbrev) {
+                found = true;
+            } else if (future.hasdst && target_abbr == future.inner.abbrev){
+                found = true;
+            }
+        }
+        if (found) {
+            // <MSK>-3
+            auto z = new Timezone();
+            auto vzone = TimezoneSP(z);
+            z->future.outer.offset = zone->future.outer.gmt_offset;
+            z->future.inner.offset = zone->future.inner.gmt_offset;
+            z->future.delta        = zone->future.inner.offset - zone->future.outer.offset;
+            z->future.max_offset   = std::max(zone->future.outer.offset, zone->future.inner.offset);
+            z->name                = target_abbr;
+
+            z->leaps_cnt = 0;
+            z->leaps = NULL;
+            z->trans_cnt = 1;
+            z->trans = new Timezone::Transition[z->trans_cnt];
+            std::memset(z->trans, 0, sizeof(Timezone::Transition));
+            z->trans[0].start       = EPOCH_NEGINF;
+            z->trans[0].local_start = EPOCH_NEGINF;
+            z->trans[0].local_lower = EPOCH_NEGINF;
+            z->trans[0].local_upper = EPOCH_NEGINF;
+            z->trans[0].leap_corr   = 0;
+            z->trans[0].leap_delta  = 0;
+            z->trans[0].leap_end    = EPOCH_NEGINF;
+            z->trans[0].leap_lend   = EPOCH_NEGINF;
+            z->ltrans = zone->trans[0];
+            return vzone;
+        }
+    }
+
+    auto z = new Timezone();
+    TimezoneSP vzone = z;
+    z->is_local = true;
+    z->name = target_abbr;
+    _virtual_fallback(z);
+    return vzone;
 }
 
 static void _virtual_fallback (Timezone* zone) {
