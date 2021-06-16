@@ -86,7 +86,7 @@ TEST("parse") {
     }
 
     SECTION("%Z timezone name") {
-        //test("abbrev", "2021-06-10 18:19:01 MSK", "%Y-%m-%d %H:%M:%S %Z", "2021-06-10 18:19:01", "Europe/Moscow");
+        test("abbrev",   "2021-06-10 18:19:01 MSK",          "%Y-%m-%d %H:%M:%S %Z", "2021-06-10 18:19:01", "Europe/Moscow");
         test("fullname", "2021-06-10 18:19:01 Europe/Minsk", "%Y-%m-%d %H:%M:%S %Z", "2021-06-10 18:19:01", "Europe/Minsk");
     }
 }

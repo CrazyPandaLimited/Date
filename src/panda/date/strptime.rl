@@ -266,7 +266,13 @@ void Date::_strptime (string_view str, string_view format) {
     }
 
     if (tzi.len) _zone = panda::time::tzget(string_view(tzi.rule, tzi.len));
-    if (tz_e) _zone = panda::time::tzget(string_view(tz_b, tz_e - tz_b));
+    if (tz_e) {
+        auto zkey = string_view(tz_b, tz_e - tz_b);
+        _zone = panda::time::tzget(zkey);
+        if (_zone->name == panda::time::GMT_FALLBACK) {
+            _zone = panda::time::tzget_abbr(zkey);
+        }
+    }
 }
 
 }}

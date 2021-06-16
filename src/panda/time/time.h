@@ -24,6 +24,8 @@ extern const int         MON2YDAY[2][12];
 extern const string_view MONTH_NAMES[12];
 extern const string_view WDAY_NAMES[7];
 
+static constexpr const char GMT_FALLBACK[] = "GMT0";
+
 struct datetime {
     ptime_t sec;
     ptime_t min;

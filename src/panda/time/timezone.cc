@@ -15,8 +15,6 @@ namespace panda { namespace time {
 
 using Timezones = panda::unordered_string_map<string, TimezoneSP>;
 
-static constexpr const char GMT_FALLBACK[] = "GMT0";
-
 static string _tzdir;
 static string _tzsysdir = __PTIME_TZDIR;
 static string _tzembededdir = PANDA_DATE_ZONEINFO_DIR;
@@ -247,26 +245,16 @@ static TimezoneSP _tzget_abbr (const string_view& target_abbr) {
     }
 
     if (target_zone) {
-        auto z = new Timezone();
-        auto vzone = TimezoneSP(z);
-        z->future = target_zone->future;
-        z->name   = target_abbr;
+        auto offset = target_zone->future.outer.gmt_offset;
+        auto sign = offset >= 0 ? '+' : '-';
+        auto rev_sign = sign == '+' ? '-' : '+';
+        if (sign == '-') offset *= -1;
+        auto h = offset / 3600;
+        auto m = (offset % 3600) / 60;
+        char buff[20];
 
-        z->leaps_cnt = 0;
-        z->leaps = NULL;
-        z->trans_cnt = 1;
-        z->trans = new Timezone::Transition[z->trans_cnt];
-        std::memset(z->trans, 0, sizeof(Timezone::Transition));
-        z->trans[0].start       = EPOCH_NEGINF;
-        z->trans[0].local_start = EPOCH_NEGINF;
-        z->trans[0].local_lower = EPOCH_NEGINF;
-        z->trans[0].local_upper = EPOCH_NEGINF;
-        z->trans[0].leap_corr   = 0;
-        z->trans[0].leap_delta  = 0;
-        z->trans[0].leap_end    = EPOCH_NEGINF;
-        z->trans[0].leap_lend   = EPOCH_NEGINF;
-        z->ltrans = target_zone->trans[0];
-        return vzone;
+        auto count = sprintf(buff, "<%c%02d:%02d>%c%02d:%02d", sign,h,m,rev_sign, h, m);
+        return _tzget(string_view(buff, count));
     }
 
 
