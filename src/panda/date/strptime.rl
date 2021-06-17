@@ -181,7 +181,6 @@ static inline int _parse_str(int cs, const char* p, const char* pe, int& week, d
 
 static inline MetaConsume _parse_meta(const char* p, const char* pe, WeekInterpretation& week_interptetation)  {
     const char* pb     = p;
-    const char* eof    = pe;
     int         cs     = meta_parser_en_m_main;
     int         p_cs   = 0;
 
@@ -224,8 +223,6 @@ void Date::_strptime (string_view str, string_view format) {
             }
         } else {
             meta_result.consumed = 0;
-            auto skip = *m_p == *s_p;
-            // printf("...skip-char %d?\n", skip);
             if (*m_p++ != *s_p++) {
                 // printf("char mismatch\n");
                 _error = errc::parser_error;

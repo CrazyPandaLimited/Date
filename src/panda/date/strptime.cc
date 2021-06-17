@@ -2829,12 +2829,11 @@ static const int meta_parser_en_m_main = 1;
 
 static inline MetaConsume _parse_meta(const char* p, const char* pe, WeekInterpretation& week_interptetation)  {
     const char* pb     = p;
-    const char* eof    = pe;
     int         cs     = meta_parser_en_m_main;
     int         p_cs   = 0;
 
     
-#line 2838 "src/panda/date/strptime.cc"
+#line 2837 "src/panda/date/strptime.cc"
 	{
 	if ( p == pe )
 		goto _test_eof;
@@ -2858,7 +2857,7 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 2862 "src/panda/date/strptime.cc"
+#line 2861 "src/panda/date/strptime.cc"
 	switch( (*p) ) {
 		case 9: goto tr0;
 		case 32: goto tr0;
@@ -3040,7 +3039,7 @@ st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 3044 "src/panda/date/strptime.cc"
+#line 3043 "src/panda/date/strptime.cc"
 	goto st0;
 	}
 	_test_eof3: cs = 3; goto _test_eof; 
@@ -3051,7 +3050,7 @@ case 4:
 	_out: {}
 	}
 
-#line 189 "src/panda/date/strptime.rl"
+#line 188 "src/panda/date/strptime.rl"
 
     auto consumed = p - pb;
     // printf("_parse_meta '%s' p_cs=%d, c=%d, cs=%d\n", pb, p_cs, consumed, cs);
@@ -3090,8 +3089,6 @@ void Date::_strptime (string_view str, string_view format) {
             }
         } else {
             meta_result.consumed = 0;
-            auto skip = *m_p == *s_p;
-            // printf("...skip-char %d?\n", skip);
             if (*m_p++ != *s_p++) {
                 // printf("char mismatch\n");
                 _error = errc::parser_error;
