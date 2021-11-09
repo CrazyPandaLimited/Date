@@ -15,7 +15,6 @@ my %params = (
     PAYLOAD       => {'clib/zoneinfo' => '/zoneinfo'},
     BIN_DEPS      => ['XS::Framework', 'Export::XS'],
     BIN_SHARE     => {INCLUDE  => {'src' => '/'}},
-    dist          => {TARFLAGS => 'hcvf'},
     CLIB          => {
         DIR          => 'clib',
         CMAKE_TARGET => $cmake_project,
