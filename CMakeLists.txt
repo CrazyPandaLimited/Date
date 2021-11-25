@@ -1,4 +1,9 @@
 cmake_minimum_required(VERSION 3.0)
+
+if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    set(IS_SUBPROJECT TRUE)
+endif()
+
 project(panda-date VERSION 2.1.1 LANGUAGES CXX)
 
 set(LIB_TYPE STATIC)
@@ -22,8 +27,13 @@ set_source_files_properties(src/panda/date/parse-date.cc     PROPERTIES COMPILE_
 set_source_files_properties(src/panda/date/parse-relative.cc PROPERTIES COMPILE_FLAGS "-Wno-implicit-fallthrough -Wno-unused-const-variable")
 set_source_files_properties(src/panda/date/strptime.cc       PROPERTIES COMPILE_FLAGS "-Wno-implicit-fallthrough -Wno-unused-const-variable")
 
+set(ZONE_INFO ${CMAKE_INSTALL_PREFIX}/share/zoneinfo)
+if (IS_SUBPROJECT)
+    set(ZONE_INFO ${CMAKE_CURRENT_SOURCE_DIR}/zoneinfo)
+endif()
+
 target_compile_definitions(${PROJECT_NAME} PRIVATE
-    PANDA_DATE_ZONEINFO_DIR="${CMAKE_INSTALL_PREFIX}/share/zoneinfo"
+    PANDA_DATE_ZONEINFO_DIR="${ZONE_INFO}"
 )
 message(STATUS ${CMAKE_SYSTEM_PREFIX_PATH})
 
